@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lazydaidai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="csapp bomb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="csapp bomb">
+<meta property="og:url" content="https://lazydaidai.github.io/2021/02/10/2020/csapp%20bomb/index.html">
+<meta property="og:site_name" content="DaiDai&#39;s blog">
+<meta property="og:description" content="csapp bomb">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210204164941751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210205001943955.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210205182424973.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2021-02-10T07:55:21.000Z">
+<meta property="article:modified_time" content="2021-02-13T17:39:27.527Z">
+<meta property="article:author" content="DaiDai">
+<meta property="article:tag" content="csapp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210204164941751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="https://lazydaidai.github.io/2021/02/10/2020/csapp%20bomb/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>csapp bomb | DaiDai's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DaiDai's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lazydaidai.github.io/2021/02/10/2020/csapp%20bomb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="DaiDai">
+      <meta itemprop="description" content="never stop learning">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DaiDai's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          csapp bomb
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-10 15:55:21" itemprop="dateCreated datePublished" datetime="2021-02-10T15:55:21+08:00">2021-02-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-14 01:39:27" itemprop="dateModified" datetime="2021-02-14T01:39:27+08:00">2021-02-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/code/" itemprop="url" rel="index"><span itemprop="name">code</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="csapp-bomb"><a href="#csapp-bomb" class="headerlink" title="csapp bomb"></a>csapp bomb</h1><a id="more"></a>
+
+<h2 id="phase-1"><a href="#phase-1" class="headerlink" title="phase_1"></a>phase_1</h2><p>一脸懵逼，也不懂要干啥，直接用高大的pwndbg来一下，一顿ni/si后看到这个<br><img src="https://img-blog.csdnimg.cn/20210204164941751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>然后就过了？？？<br>进入正题，简单咨询了一下，按照预期思路<br><code>objdump -d ./bomb &gt; obj.asm</code><br>然后简易的配置个如*一般的高亮开始静态分析。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">0000000000401338 <span class="tag">&lt;<span class="name">strings_not_equal</span>&gt;</span>:</span><br><span class="line">  401338:	41 54                	push   %r12</span><br><span class="line">  40133a:	55                   	push   %rbp</span><br><span class="line">  40133b:	53                   	push   %rbx</span><br><span class="line">  40133c:	48 89 fb             	mov    %rdi,%rbx</span><br><span class="line">  40133f:	48 89 f5             	mov    %rsi,%rbp</span><br><span class="line">  401342:	e8 d4 ff ff ff       	callq  40131b <span class="tag">&lt;<span class="name">string_length</span>&gt;</span></span><br><span class="line">  401347:	41 89 c4             	mov    %eax,%r12d</span><br><span class="line">  40134a:	48 89 ef             	mov    %rbp,%rdi</span><br><span class="line">  40134d:	e8 c9 ff ff ff       	callq  40131b <span class="tag">&lt;<span class="name">string_length</span>&gt;</span></span><br><span class="line">  401352:	ba 01 00 00 00       	mov    $0x1,%edx</span><br><span class="line">  401357:	41 39 c4             	cmp    %eax,%r12d</span><br><span class="line">  40135a:	75 3f                	jne    40139b &lt;strings_not_equal+0x63&gt;</span><br><span class="line">  40135c:	0f b6 03             	movzbl (%rbx),%eax</span><br><span class="line">  40135f:	84 c0                	test   %al,%al</span><br><span class="line">  401361:	74 25                	je     401388 &lt;strings_not_equal+0x50&gt;</span><br><span class="line">  401363:	3a 45 00             	cmp    0x0(%rbp),%al</span><br><span class="line">  401366:	74 0a                	je     401372 &lt;strings_not_equal+0x3a&gt;</span><br><span class="line">  401368:	eb 25                	jmp    40138f &lt;strings_not_equal+0x57&gt;</span><br><span class="line">  40136a:	3a 45 00             	cmp    0x0(%rbp),%al</span><br><span class="line">  40136d:	0f 1f 00             	nopl   (%rax)</span><br><span class="line">  401370:	75 24                	jne    401396 &lt;strings_not_equal+0x5e&gt;</span><br><span class="line">  401372:	48 83 c3 01          	add    $0x1,%rbx</span><br><span class="line">  401376:	48 83 c5 01          	add    $0x1,%rbp</span><br><span class="line">  40137a:	0f b6 03             	movzbl (%rbx),%eax</span><br><span class="line">  40137d:	84 c0                	test   %al,%al</span><br><span class="line">  40137f:	75 e9                	jne    40136a &lt;strings_not_equal+0x32&gt;</span><br><span class="line">  401381:	ba 00 00 00 00       	mov    $0x0,%edx</span><br><span class="line">  401386:	eb 13                	jmp    40139b &lt;strings_not_equal+0x63&gt;</span><br><span class="line">  401388:	ba 00 00 00 00       	mov    $0x0,%edx</span><br><span class="line">  40138d:	eb 0c                	jmp    40139b &lt;strings_not_equal+0x63&gt;</span><br><span class="line">  40138f:	ba 01 00 00 00       	mov    $0x1,%edx</span><br><span class="line">  401394:	eb 05                	jmp    40139b &lt;strings_not_equal+0x63&gt;</span><br><span class="line">  401396:	ba 01 00 00 00       	mov    $0x1,%edx</span><br><span class="line">  40139b:	89 d0                	mov    %edx,%eax</span><br><span class="line">  40139d:	5b                   	pop    %rbx</span><br><span class="line">  40139e:	5d                   	pop    %rbp</span><br><span class="line">  40139f:	41 5c                	pop    %r12</span><br><span class="line">  4013a1:	c3                   	retq  </span><br></pre></td></tr></table></figure>
+<p>开头把参数又分别存入了<code>rbx</code>、<code>rbp</code>中，结尾<code>401396</code>有个返回1的操作，这明显不是我们想要的，往上翻翻明显先给<code>edx</code>赋0再<code>jmp 40139b</code>才是我们要的。<br>那么如何做呢，可以分析出先比较长度，然后先看输入的值是否为0，不是再和目的字符串比较，然后跳回去（啊经典的goto式循环），这么一直走，能比完还一样就可以按我们的预期返回0了。<br>虽然光看函数名立刻能猜出它的功能，但是还是试了波眼睛逆向-。-<br>所以答案就是那串字符串了。</p>
+<h2 id="phase-2"><a href="#phase-2" class="headerlink" title="phase_2"></a>phase_2</h2><p>看到一个read_six_num，按照上题的逻辑估计全在里面了，快捷键ctrl F跳过去。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">000000000040145c <span class="tag">&lt;<span class="name">read_six_numbers</span>&gt;</span>:</span><br><span class="line">  40145c:	48 83 ec 18          	sub    $0x18,%rsp</span><br><span class="line">  401460:	48 89 f2             	mov    %rsi,%rdx</span><br><span class="line">  401463:	48 8d 4e 04          	lea    0x4(%rsi),%rcx</span><br><span class="line">  401467:	48 8d 46 14          	lea    0x14(%rsi),%rax</span><br><span class="line">  40146b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)</span><br><span class="line">  401470:	48 8d 46 10          	lea    0x10(%rsi),%rax</span><br><span class="line">  401474:	48 89 04 24          	mov    %rax,(%rsp)</span><br><span class="line">  401478:	4c 8d 4e 0c          	lea    0xc(%rsi),%r9</span><br><span class="line">  40147c:	4c 8d 46 08          	lea    0x8(%rsi),%r8</span><br><span class="line">  401480:	be c3 25 40 00       	mov    $0x4025c3,%esi</span><br><span class="line">  401485:	b8 00 00 00 00       	mov    $0x0,%eax</span><br><span class="line">  40148a:	e8 61 f7 ff ff       	callq  400bf0 &lt;__isoc99_sscanf@plt&gt;</span><br><span class="line">  40148f:	83 f8 05             	cmp    $0x5,%eax</span><br><span class="line">  401492:	7f 05                	jg     401499 &lt;read_six_numbers+0x3d&gt;</span><br><span class="line">  401494:	e8 a1 ff ff ff       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  401499:	48 83 c4 18          	add    $0x18,%rsp</span><br><span class="line">  40149d:	c3                   	retq </span><br></pre></td></tr></table></figure>
+<p>结合call sscanf知道前面在传参，当时pwndbg已经分析出了格式化字符串，所以知道要输入6个数字，回到phase_2。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">0000000000400efc <span class="tag">&lt;<span class="name">phase_2</span>&gt;</span>:</span><br><span class="line">  400efc:	55                   	push   %rbp</span><br><span class="line">  400efd:	53                   	push   %rbx</span><br><span class="line">  400efe:	48 83 ec 28          	sub    $0x28,%rsp</span><br><span class="line">  400f02:	48 89 e6             	mov    %rsp,%rsi</span><br><span class="line">  400f05:	e8 52 05 00 00       	callq  40145c <span class="tag">&lt;<span class="name">read_six_numbers</span>&gt;</span></span><br><span class="line">  400f0a:	83 3c 24 01          	cmpl   $0x1,(%rsp)</span><br><span class="line">  400f0e:	74 20                	je     400f30 &lt;phase_2+0x34&gt;</span><br><span class="line">  400f10:	e8 25 05 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  400f15:	eb 19                	jmp    400f30 &lt;phase_2+0x34&gt;</span><br><span class="line">  400f17:	8b 43 fc             	mov    -0x4(%rbx),%eax</span><br><span class="line">  400f1a:	01 c0                	add    %eax,%eax</span><br><span class="line">  400f1c:	39 03                	cmp    %eax,(%rbx)</span><br><span class="line">  400f1e:	74 05                	je     400f25 &lt;phase_2+0x29&gt;</span><br><span class="line">  400f20:	e8 15 05 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  400f25:	48 83 c3 04          	add    $0x4,%rbx</span><br><span class="line">  400f29:	48 39 eb             	cmp    %rbp,%rbx</span><br><span class="line">  400f2c:	75 e9                	jne    400f17 &lt;phase_2+0x1b&gt;</span><br><span class="line">  400f2e:	eb 0c                	jmp    400f3c &lt;phase_2+0x40&gt;</span><br><span class="line">  400f30:	48 8d 5c 24 04       	lea    0x4(%rsp),%rbx</span><br><span class="line">  400f35:	48 8d 6c 24 18       	lea    0x18(%rsp),%rbp</span><br><span class="line">  400f3a:	eb db                	jmp    400f17 &lt;phase_2+0x1b&gt;</span><br><span class="line">  400f3c:	48 83 c4 28          	add    $0x28,%rsp</span><br><span class="line">  400f40:	5b                   	pop    %rbx</span><br><span class="line">  400f41:	5d                   	pop    %rbp</span><br><span class="line">  400f42:	c3                   	retq</span><br></pre></td></tr></table></figure>
+<p>看到一出来就在比<code>rsp</code>了，根据经验输入的字符串都在栈上，看来这个<code>rsp</code>就是输入结果，尝试了一下也确实是的，接下来一步步分析。先判断第一个数是不是1，然后走到<code>400f1a</code>，大概判断后一个数是不是前一个数的两倍，<code>400f35</code>处有个<code>rsp+0x18</code>，手算了一下这里越界了，结合后面的跳转猜测为边界判断，那答案就是<code>1 2 4 8 16 32</code>了。</p>
+<h2 id="phase-3"><a href="#phase-3" class="headerlink" title="phase_3"></a>phase_3</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">0000000000400f43 <span class="tag">&lt;<span class="name">phase_3</span>&gt;</span>:</span><br><span class="line">  400f43:	48 83 ec 18          	sub    $0x18,%rsp</span><br><span class="line">  400f47:	48 8d 4c 24 0c       	lea    0xc(%rsp),%rcx</span><br><span class="line">  400f4c:	48 8d 54 24 08       	lea    0x8(%rsp),%rdx</span><br><span class="line">  400f51:	be cf 25 40 00       	mov    $0x4025cf,%esi</span><br><span class="line">  400f56:	b8 00 00 00 00       	mov    $0x0,%eax</span><br><span class="line">  400f5b:	e8 90 fc ff ff       	callq  400bf0 &lt;__isoc99_sscanf@plt&gt;</span><br><span class="line">  400f60:	83 f8 01             	cmp    $0x1,%eax</span><br><span class="line">  400f63:	7f 05                	jg     400f6a &lt;phase_3+0x27&gt;</span><br><span class="line">  400f65:	e8 d0 04 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  400f6a:	83 7c 24 08 07       	cmpl   $0x7,0x8(%rsp)</span><br><span class="line">  400f6f:	77 3c                	ja     400fad &lt;phase_3+0x6a&gt;</span><br><span class="line">  400f71:	8b 44 24 08          	mov    0x8(%rsp),%eax</span><br><span class="line">  400f75:	ff 24 c5 70 24 40 00 	jmpq   *0x402470(,%rax,8)</span><br><span class="line">  400f7c:	b8 cf 00 00 00       	mov    $0xcf,%eax</span><br><span class="line">  400f81:	eb 3b                	jmp    400fbe &lt;phase_3+0x7b&gt;</span><br><span class="line">  400f83:	b8 c3 02 00 00       	mov    $0x2c3,%eax</span><br><span class="line">  400f88:	eb 34                	jmp    400fbe &lt;phase_3+0x7b&gt;</span><br><span class="line">  400f8a:	b8 00 01 00 00       	mov    $0x100,%eax</span><br><span class="line">  400f8f:	eb 2d                	jmp    400fbe &lt;phase_3+0x7b&gt;</span><br><span class="line">  400f91:	b8 85 01 00 00       	mov    $0x185,%eax</span><br><span class="line">  400f96:	eb 26                	jmp    400fbe &lt;phase_3+0x7b&gt;</span><br><span class="line">  400f98:	b8 ce 00 00 00       	mov    $0xce,%eax</span><br><span class="line">  400f9d:	eb 1f                	jmp    400fbe &lt;phase_3+0x7b&gt;</span><br><span class="line">  400f9f:	b8 aa 02 00 00       	mov    $0x2aa,%eax</span><br><span class="line">  400fa4:	eb 18                	jmp    400fbe &lt;phase_3+0x7b&gt;</span><br><span class="line">  400fa6:	b8 47 01 00 00       	mov    $0x147,%eax</span><br><span class="line">  400fab:	eb 11                	jmp    400fbe &lt;phase_3+0x7b&gt;</span><br><span class="line">  400fad:	e8 88 04 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  400fb2:	b8 00 00 00 00       	mov    $0x0,%eax</span><br><span class="line">  400fb7:	eb 05                	jmp    400fbe &lt;phase_3+0x7b&gt;</span><br><span class="line">  400fb9:	b8 37 01 00 00       	mov    $0x137,%eax</span><br><span class="line">  400fbe:	3b 44 24 0c          	cmp    0xc(%rsp),%eax</span><br><span class="line">  400fc2:	74 05                	je     400fc9 &lt;phase_3+0x86&gt;</span><br><span class="line">  400fc4:	e8 71 04 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  400fc9:	48 83 c4 18          	add    $0x18,%rsp</span><br><span class="line">  400fcd:	c3                   	retq</span><br></pre></td></tr></table></figure>
+<p>起手一个scanf，分析了个规律，就是传参前要保护数据，这样就能直接看出参数个数已经保存位置了。随手敲了个<code>1 2</code>，然后第一个数不能是7，到了一个奇怪的jmpq…调试发现调到了奇怪的地方-。- 这里感觉有菜单那味儿了，跟进去发现第二个数应该是0x137，试一下，过了。。？</p>
+<h2 id="phase-4"><a href="#phase-4" class="headerlink" title="phase_4"></a>phase_4</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">0000000000400fce <span class="tag">&lt;<span class="name">func4</span>&gt;</span>:</span><br><span class="line">  400fce:	48 83 ec 08          	sub    $0x8,%rsp</span><br><span class="line">  400fd2:	89 d0                	mov    %edx,%eax</span><br><span class="line">  400fd4:	29 f0                	sub    %esi,%eax</span><br><span class="line">  400fd6:	89 c1                	mov    %eax,%ecx</span><br><span class="line">  400fd8:	c1 e9 1f             	shr    $0x1f,%ecx</span><br><span class="line">  400fdb:	01 c8                	add    %ecx,%eax</span><br><span class="line">  400fdd:	d1 f8                	sar    %eax</span><br><span class="line">  400fdf:	8d 0c 30             	lea    (%rax,%rsi,1),%ecx</span><br><span class="line">  400fe2:	39 f9                	cmp    %edi,%ecx</span><br><span class="line">  400fe4:	7e 0c                	jle    400ff2 &lt;func4+0x24&gt;</span><br><span class="line">  400fe6:	8d 51 ff             	lea    -0x1(%rcx),%edx</span><br><span class="line">  400fe9:	e8 e0 ff ff ff       	callq  400fce <span class="tag">&lt;<span class="name">func4</span>&gt;</span></span><br><span class="line">  400fee:	01 c0                	add    %eax,%eax</span><br><span class="line">  400ff0:	eb 15                	jmp    401007 &lt;func4+0x39&gt;</span><br><span class="line">  400ff2:	b8 00 00 00 00       	mov    $0x0,%eax</span><br><span class="line">  400ff7:	39 f9                	cmp    %edi,%ecx</span><br><span class="line">  400ff9:	7d 0c                	jge    401007 &lt;func4+0x39&gt;</span><br><span class="line">  400ffb:	8d 71 01             	lea    0x1(%rcx),%esi</span><br><span class="line">  400ffe:	e8 cb ff ff ff       	callq  400fce <span class="tag">&lt;<span class="name">func4</span>&gt;</span></span><br><span class="line">  401003:	8d 44 00 01          	lea    0x1(%rax,%rax,1),%eax</span><br><span class="line">  401007:	48 83 c4 08          	add    $0x8,%rsp</span><br><span class="line">  40100b:	c3                   	retq   </span><br></pre></td></tr></table></figure>
+<p>按照套路输入两个数，第二个得是0，第一个传入了f(x, 0, 14),跟进顺着走，发现x只要等于前面一串的计算结果就行了。写个代码算一下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">14</span>, c = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> t = (b - c) &gt;&gt; <span class="number">31</span>;</span><br><span class="line">    <span class="keyword">int</span> l = ((b - c) + t) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    b = l + c;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>得出是7，那就是<code>7 0</code>.顺带看一下这里面大概有个递归，居然能直接绕过-。-</p>
+<h2 id="phase-5"><a href="#phase-5" class="headerlink" title="phase_5"></a>phase_5</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">0000000000401062 <span class="tag">&lt;<span class="name">phase_5</span>&gt;</span>:</span><br><span class="line">  401062:	53                   	push   %rbx</span><br><span class="line">  401063:	48 83 ec 20          	sub    $0x20,%rsp</span><br><span class="line">  401067:	48 89 fb             	mov    %rdi,%rbx</span><br><span class="line">  40106a:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax</span><br><span class="line">  401071:	00 00 </span><br><span class="line">  401073:	48 89 44 24 18       	mov    %rax,0x18(%rsp)</span><br><span class="line">  401078:	31 c0                	xor    %eax,%eax</span><br><span class="line">  40107a:	e8 9c 02 00 00       	callq  40131b <span class="tag">&lt;<span class="name">string_length</span>&gt;</span></span><br><span class="line">  40107f:	83 f8 06             	cmp    $0x6,%eax</span><br><span class="line">  401082:	74 4e                	je     4010d2 &lt;phase_5+0x70&gt;</span><br><span class="line">  401084:	e8 b1 03 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  401089:	eb 47                	jmp    4010d2 &lt;phase_5+0x70&gt;</span><br><span class="line">  40108b:	0f b6 0c 03          	movzbl (%rbx,%rax,1),%ecx</span><br><span class="line">  40108f:	88 0c 24             	mov    %cl,(%rsp)</span><br><span class="line">  401092:	48 8b 14 24          	mov    (%rsp),%rdx</span><br><span class="line">  401096:	83 e2 0f             	and    $0xf,%edx</span><br><span class="line">  401099:	0f b6 92 b0 24 40 00 	movzbl 0x4024b0(%rdx),%edx</span><br><span class="line">  4010a0:	88 54 04 10          	mov    %dl,0x10(%rsp,%rax,1)</span><br><span class="line">  4010a4:	48 83 c0 01          	add    $0x1,%rax</span><br><span class="line">  4010a8:	48 83 f8 06          	cmp    $0x6,%rax</span><br><span class="line">  4010ac:	75 dd                	jne    40108b &lt;phase_5+0x29&gt;</span><br><span class="line">  4010ae:	c6 44 24 16 00       	movb   $0x0,0x16(%rsp)</span><br><span class="line">  4010b3:	be 5e 24 40 00       	mov    $0x40245e,%esi</span><br><span class="line">  4010b8:	48 8d 7c 24 10       	lea    0x10(%rsp),%rdi</span><br><span class="line">  4010bd:	e8 76 02 00 00       	callq  401338 <span class="tag">&lt;<span class="name">strings_not_equal</span>&gt;</span></span><br><span class="line">  4010c2:	85 c0                	test   %eax,%eax</span><br><span class="line">  4010c4:	74 13                	je     4010d9 &lt;phase_5+0x77&gt;</span><br><span class="line">  4010c6:	e8 6f 03 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  4010cb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)</span><br><span class="line">  4010d0:	eb 07                	jmp    4010d9 &lt;phase_5+0x77&gt;</span><br><span class="line">  4010d2:	b8 00 00 00 00       	mov    $0x0,%eax</span><br><span class="line">  4010d7:	eb b2                	jmp    40108b &lt;phase_5+0x29&gt;</span><br><span class="line">  4010d9:	48 8b 44 24 18       	mov    0x18(%rsp),%rax</span><br><span class="line">  4010de:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax</span><br><span class="line">  4010e5:	00 00 </span><br><span class="line">  4010e7:	74 05                	je     4010ee &lt;phase_5+0x8c&gt;</span><br><span class="line">  4010e9:	e8 42 fa ff ff       	callq  400b30 &lt;__stack_chk_fail@plt&gt;</span><br><span class="line">  4010ee:	48 83 c4 20          	add    $0x20,%rsp</span><br><span class="line">  4010f2:	5b                   	pop    %rbx</span><br><span class="line">  4010f3:	c3                   	retq   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>熟悉的<code>fs:0x28</code>，以为能稍微简单点，结果跟着走直接上下来回跳-。-<br>按照前面的套路分析出要输入个字符串，长度是6，然后一顿操作根据它的索引找到了个新的东西(<code>0x4024b0</code>)好像，然后和<code>0x40245e</code>这一块内存比较。<br>gdb运行看一眼<br><img src="https://img-blog.csdnimg.cn/20210205001943955.png" alt="在这里插入图片描述"><br>顺带现场查了下movzbl,正是一个单表替换操作，那就手数索引，再找一串可用字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">d = [<span class="number">9</span>, <span class="number">15</span>, <span class="number">14</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line">payload = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> d:</span><br><span class="line">    payload += <span class="built_in">chr</span>(i + <span class="number">112</span> - <span class="number">16</span>)</span><br></pre></td></tr></table></figure>
+<p>大概这样就找到了能用的字符串，是<code>ionefg</code></p>
+<h2 id="phase-6"><a href="#phase-6" class="headerlink" title="phase_6"></a>phase_6</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">00000000004010f4 <span class="tag">&lt;<span class="name">phase_6</span>&gt;</span>:</span><br><span class="line">  4010f4:	41 56                	push   %r14</span><br><span class="line">  4010f6:	41 55                	push   %r13</span><br><span class="line">  4010f8:	41 54                	push   %r12</span><br><span class="line">  4010fa:	55                   	push   %rbp</span><br><span class="line">  4010fb:	53                   	push   %rbx</span><br><span class="line">  4010fc:	48 83 ec 50          	sub    $0x50,%rsp</span><br><span class="line">  401100:	49 89 e5             	mov    %rsp,%r13</span><br><span class="line">  401103:	48 89 e6             	mov    %rsp,%rsi</span><br><span class="line">  401106:	e8 51 03 00 00       	callq  40145c <span class="tag">&lt;<span class="name">read_six_numbers</span>&gt;</span></span><br><span class="line">  40110b:	49 89 e6             	mov    %rsp,%r14</span><br><span class="line">  40110e:	41 bc 00 00 00 00    	mov    $0x0,%r12d</span><br><span class="line">  401114:	4c 89 ed             	mov    %r13,%rbp</span><br><span class="line">  401117:	41 8b 45 00          	mov    0x0(%r13),%eax</span><br><span class="line">  40111b:	83 e8 01             	sub    $0x1,%eax</span><br><span class="line">  40111e:	83 f8 05             	cmp    $0x5,%eax</span><br><span class="line">  401121:	76 05                	jbe    401128 &lt;phase_6+0x34&gt;</span><br><span class="line">  401123:	e8 12 03 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  401128:	41 83 c4 01          	add    $0x1,%r12d</span><br><span class="line">  40112c:	41 83 fc 06          	cmp    $0x6,%r12d</span><br><span class="line">  401130:	74 21                	je     401153 &lt;phase_6+0x5f&gt;</span><br><span class="line">  401132:	44 89 e3             	mov    %r12d,%ebx</span><br><span class="line">  401135:	48 63 c3             	movslq %ebx,%rax</span><br><span class="line">  401138:	8b 04 84             	mov    (%rsp,%rax,4),%eax</span><br><span class="line">  40113b:	39 45 00             	cmp    %eax,0x0(%rbp)</span><br><span class="line">  40113e:	75 05                	jne    401145 &lt;phase_6+0x51&gt;</span><br><span class="line">  401140:	e8 f5 02 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  401145:	83 c3 01             	add    $0x1,%ebx</span><br><span class="line">  401148:	83 fb 05             	cmp    $0x5,%ebx</span><br><span class="line">  40114b:	7e e8                	jle    401135 &lt;phase_6+0x41&gt;</span><br><span class="line">  40114d:	49 83 c5 04          	add    $0x4,%r13</span><br><span class="line">  401151:	eb c1                	jmp    401114 &lt;phase_6+0x20&gt;</span><br><span class="line">  401153:	48 8d 74 24 18       	lea    0x18(%rsp),%rsi</span><br><span class="line">  401158:	4c 89 f0             	mov    %r14,%rax</span><br><span class="line">  40115b:	b9 07 00 00 00       	mov    $0x7,%ecx</span><br><span class="line">  401160:	89 ca                	mov    %ecx,%edx</span><br><span class="line">  401162:	2b 10                	sub    (%rax),%edx</span><br><span class="line">  401164:	89 10                	mov    %edx,(%rax)</span><br><span class="line">  401166:	48 83 c0 04          	add    $0x4,%rax</span><br><span class="line">  40116a:	48 39 f0             	cmp    %rsi,%rax</span><br><span class="line">  40116d:	75 f1                	jne    401160 &lt;phase_6+0x6c&gt;</span><br><span class="line">  40116f:	be 00 00 00 00       	mov    $0x0,%esi</span><br><span class="line">  401174:	eb 21                	jmp    401197 &lt;phase_6+0xa3&gt;</span><br><span class="line">  401176:	48 8b 52 08          	mov    0x8(%rdx),%rdx</span><br><span class="line">  40117a:	83 c0 01             	add    $0x1,%eax</span><br><span class="line">  40117d:	39 c8                	cmp    %ecx,%eax</span><br><span class="line">  40117f:	75 f5                	jne    401176 &lt;phase_6+0x82&gt;</span><br><span class="line">  401181:	eb 05                	jmp    401188 &lt;phase_6+0x94&gt;</span><br><span class="line">  401183:	ba d0 32 60 00       	mov    $0x6032d0,%edx</span><br><span class="line">  401188:	48 89 54 74 20       	mov    %rdx,0x20(%rsp,%rsi,2)</span><br><span class="line">  40118d:	48 83 c6 04          	add    $0x4,%rsi</span><br><span class="line">  401191:	48 83 fe 18          	cmp    $0x18,%rsi</span><br><span class="line">  401195:	74 14                	je     4011ab &lt;phase_6+0xb7&gt;</span><br><span class="line">  401197:	8b 0c 34             	mov    (%rsp,%rsi,1),%ecx</span><br><span class="line">  40119a:	83 f9 01             	cmp    $0x1,%ecx</span><br><span class="line">  40119d:	7e e4                	jle    401183 &lt;phase_6+0x8f&gt;</span><br><span class="line">  40119f:	b8 01 00 00 00       	mov    $0x1,%eax</span><br><span class="line">  4011a4:	ba d0 32 60 00       	mov    $0x6032d0,%edx</span><br><span class="line">  4011a9:	eb cb                	jmp    401176 &lt;phase_6+0x82&gt;</span><br><span class="line">  4011ab:	48 8b 5c 24 20       	mov    0x20(%rsp),%rbx</span><br><span class="line">  4011b0:	48 8d 44 24 28       	lea    0x28(%rsp),%rax</span><br><span class="line">  4011b5:	48 8d 74 24 50       	lea    0x50(%rsp),%rsi</span><br><span class="line">  4011ba:	48 89 d9             	mov    %rbx,%rcx</span><br><span class="line">  4011bd:	48 8b 10             	mov    (%rax),%rdx</span><br><span class="line">  4011c0:	48 89 51 08          	mov    %rdx,0x8(%rcx)</span><br><span class="line">  4011c4:	48 83 c0 08          	add    $0x8,%rax</span><br><span class="line">  4011c8:	48 39 f0             	cmp    %rsi,%rax</span><br><span class="line">  4011cb:	74 05                	je     4011d2 &lt;phase_6+0xde&gt;</span><br><span class="line">  4011cd:	48 89 d1             	mov    %rdx,%rcx</span><br><span class="line">  4011d0:	eb eb                	jmp    4011bd &lt;phase_6+0xc9&gt;</span><br><span class="line">  4011d2:	48 c7 42 08 00 00 00 	movq   $0x0,0x8(%rdx)</span><br><span class="line">  4011d9:	00 </span><br><span class="line">  4011da:	bd 05 00 00 00       	mov    $0x5,%ebp</span><br><span class="line">  4011df:	48 8b 43 08          	mov    0x8(%rbx),%rax</span><br><span class="line">  4011e3:	8b 00                	mov    (%rax),%eax</span><br><span class="line">  4011e5:	39 03                	cmp    %eax,(%rbx)</span><br><span class="line">  4011e7:	7d 05                	jge    4011ee &lt;phase_6+0xfa&gt;</span><br><span class="line">  4011e9:	e8 4c 02 00 00       	callq  40143a <span class="tag">&lt;<span class="name">explode_bomb</span>&gt;</span></span><br><span class="line">  4011ee:	48 8b 5b 08          	mov    0x8(%rbx),%rbx</span><br><span class="line">  4011f2:	83 ed 01             	sub    $0x1,%ebp</span><br><span class="line">  4011f5:	75 e8                	jne    4011df &lt;phase_6+0xeb&gt;</span><br><span class="line">  4011f7:	48 83 c4 50          	add    $0x50,%rsp</span><br><span class="line">  4011fb:	5b                   	pop    %rbx</span><br><span class="line">  4011fc:	5d                   	pop    %rbp</span><br><span class="line">  4011fd:	41 5c                	pop    %r12</span><br><span class="line">  4011ff:	41 5d                	pop    %r13</span><br><span class="line">  401201:	41 5e                	pop    %r14</span><br><span class="line">  401203:	c3  </span><br></pre></td></tr></table></figure>
+<p>终于最后一个了，这一看就长的离谱。。<br>顺着走，大概能看出<code>rsp</code>是输入，存在了<code>r13</code>,<code>rsi</code>里，然后<code>eax</code>，<code>ebx</code>都是计数器，从<code>401128</code>到<code>40113e</code>发现要求所有字母和第一个不一样；然后<code>401145</code>挪到了第二个继续来一次。。这不是类似冒泡麽，那就好了，所有字符都不一样，再加上很明显都要小于6，看来我随手的<code>1 2 3 4 5 6</code>居然可以。<br>窃喜试了一下，炸了，回头继续分析。。<br>分析一下出去循环应该到了<code>401153</code>，上来就没看懂，打个断点看一下。<br>走到了<code>401164</code>发现输入的第一个数x变成了7-x，之后跳了回去，看来所有数都变成7-x了，gdb继续ni发现是这样的。那然后就到了这儿<code>40116f</code><br>然后就懵了，两个跳转似乎都能走，一下不慎记不住寄存器直接忘了从哪儿跳过来的了，那就上gdb。输入易于分析的<code>1 2 3 4 5 6</code>，一步步调试到<code>401195</code>之前。发现这部分按我们输入的顺序（7-x后）把node连了起来，啊这node啊，原来是链表。然后跳转过去就是检验了，发现该链表要数据的低4字节满足从大到小，那看一眼node再自己排个序就出来了，答案是<code>4 3 2 1 6 5</code>。</p>
+<h2 id="secret-phase"><a href="#secret-phase" class="headerlink" title="secret_phase"></a>secret_phase</h2><p>之前已经被预告有隐藏关了，直接搜索secret，就找到了。那么看看调用，发现来自<code>phase_defused</code>这个函数里。<br>大概要先过6关，然后触发输入三个数，但是我咋直接结束了。。<br>断在输入三个数哪里，发现它认为我们输入了<code>7 0</code>，search一下没看懂，但是发现了这个就是第4关的答案。<br>那好了，第4关多输入个<code>abc</code>，单步看一眼比较的字符串，再抄出来，进入了隐藏关。<br>分析一下输入一行，调用了<code>strtol</code>函数，那应该是要输入一个数字，看一下不能是0，不能和<code>$0x6030f0</code>一样，先随手输个10进去看看，看一眼内存。有了上题的经验这很明显是个二叉树，抄出来发现还是排序二叉树。<img src="https://img-blog.csdnimg.cn/20210205182424973.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>继续走发现在比较是否和当前节点相同，然后有个明显的选左节点右节点的操作，很容易猜测在二分查找了，那意思基本明白了，看下要求返回值得是2。看到有两种返回方式<code>rax*2</code>或者<code>2*rax+1</code>，然后最终应该返回是个0，那就是$0,2<em>0+1=1,2</em>1=2$了。画个图（太丑了，不拍了）找一下答案是0x16也就是22。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>发现自己静态分析还是太low了，遇到分叉的就分析不过来了，不过经历了phase6的洗礼，在面对二叉树的时候能很快分析出来了。<br>3个注意点：</p>
+<ul>
+<li>[rsp,rsi,1]，这里就是类似数组rsp[rsi]，一个索引的效果。</li>
+<li>mov [rdi+4],[rdi]，p = p-&gt;next一般的操作</li>
+<li>lea和mov的区别</li>
+</ul>
+<p>所有的答案：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(aslr = <span class="literal">False</span>, log_level = <span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">p = process(<span class="string">&#x27;./bomb&#x27;</span>)</span><br><span class="line"></span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">&quot;Border relations with Canada have never been better.&quot;</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">&quot;1 2 4 8 16 32&quot;</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">&quot;1 311&quot;</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">&quot;7 0 DrEvil&quot;</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">&quot;ionefg&quot;</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">&quot;4 3 2 1 6 5&quot;</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">&quot;22&quot;</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/csapp/" rel="tag"># csapp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/10/2020/csapp%20DataLab/" rel="prev" title="csapp DataLab">
+      <i class="fa fa-chevron-left"></i> csapp DataLab
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/10/2020/csapp%20attack/" rel="next" title="csapp attack">
+      csapp attack <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#csapp-bomb"><span class="nav-number">1.</span> <span class="nav-text">csapp bomb</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#phase-1"><span class="nav-number">1.1.</span> <span class="nav-text">phase_1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phase-2"><span class="nav-number">1.2.</span> <span class="nav-text">phase_2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phase-3"><span class="nav-number">1.3.</span> <span class="nav-text">phase_3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phase-4"><span class="nav-number">1.4.</span> <span class="nav-text">phase_4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phase-5"><span class="nav-number">1.5.</span> <span class="nav-text">phase_5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phase-6"><span class="nav-number">1.6.</span> <span class="nav-text">phase_6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#secret-phase"><span class="nav-number">1.7.</span> <span class="nav-text">secret_phase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.8.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DaiDai"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">DaiDai</p>
+  <div class="site-description" itemprop="description">never stop learning</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://m3wsec.github.io/" title="http:&#x2F;&#x2F;m3wsec.github.io" rel="noopener" target="_blank">m3w</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/qq_46091464" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_46091464" rel="noopener" target="_blank">Firebasky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/erR0Ratao" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;erR0Ratao" rel="noopener" target="_blank">atao</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.d1a0.cn/" title="https:&#x2F;&#x2F;www.d1a0.cn&#x2F;" rel="noopener" target="_blank">d1a0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/anweilx/" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;anweilx&#x2F;" rel="noopener" target="_blank">anweilx</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://me.csdn.net/Kroner" title="https:&#x2F;&#x2F;me.csdn.net&#x2F;Kroner" rel="noopener" target="_blank">No</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/Amherstieae" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;Amherstieae" rel="noopener" target="_blank">beta</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.y4tacker.top/" title="http:&#x2F;&#x2F;blog.y4tacker.top" rel="noopener" target="_blank">Y4tacker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://yq1ng.github.io/" title="http:&#x2F;&#x2F;yq1ng.github.io" rel="noopener" target="_blank">yq1ng</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://snowywar.top/wordpress" title="http:&#x2F;&#x2F;snowywar.top&#x2F;wordpress" rel="noopener" target="_blank">snowy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.sy4.top/" title="https:&#x2F;&#x2F;www.sy4.top&#x2F;" rel="noopener" target="_blank">picnic</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://justloseit.top/" title="http:&#x2F;&#x2F;justloseit.top&#x2F;" rel="noopener" target="_blank">Joker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://s0uthwood.github.io/" title="https:&#x2F;&#x2F;s0uthwood.github.io&#x2F;" rel="noopener" target="_blank">s0uthwood</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kfxp12138.github.io/" title="https:&#x2F;&#x2F;kfxp12138.github.io&#x2F;" rel="noopener" target="_blank">triplewing</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaiDai</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">197k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:59</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

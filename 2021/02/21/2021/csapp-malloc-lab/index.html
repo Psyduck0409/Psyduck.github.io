@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lazydaidai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="csapp malloc lab看书速度实在太慢了，被迫直接跳到这个lab。 理论稍微记几个关键点：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="csapp malloc lab">
+<meta property="og:url" content="https://lazydaidai.github.io/2021/02/21/2021/csapp-malloc-lab/index.html">
+<meta property="og:site_name" content="DaiDai&#39;s blog">
+<meta property="og:description" content="csapp malloc lab看书速度实在太慢了，被迫直接跳到这个lab。 理论稍微记几个关键点：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-20T17:35:18.000Z">
+<meta property="article:modified_time" content="2021-02-28T07:52:41.793Z">
+<meta property="article:author" content="DaiDai">
+<meta property="article:tag" content="csapp">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lazydaidai.github.io/2021/02/21/2021/csapp-malloc-lab/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>csapp malloc lab | DaiDai's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DaiDai's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lazydaidai.github.io/2021/02/21/2021/csapp-malloc-lab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="DaiDai">
+      <meta itemprop="description" content="never stop learning">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DaiDai's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          csapp malloc lab
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-21 01:35:18" itemprop="dateCreated datePublished" datetime="2021-02-21T01:35:18+08:00">2021-02-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-28 15:52:41" itemprop="dateModified" datetime="2021-02-28T15:52:41+08:00">2021-02-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/code/" itemprop="url" rel="index"><span itemprop="name">code</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>13k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="csapp-malloc-lab"><a href="#csapp-malloc-lab" class="headerlink" title="csapp malloc lab"></a>csapp malloc lab</h1><p>看书速度实在太慢了，被迫直接跳到这个lab。</p>
+<h2 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h2><p>稍微记几个关键点：</p>
+<a id="more"></a>
+<ul>
+<li>虚拟地址对映的物理地址不固定</li>
+<li>一个地址里其实分为好多部分，如典型的 TLBT | TLBI | VPO，因此是否被加载的页表项的区别也就只有控制位；地址翻译可以看图9-22，很好的例子。</li>
+<li>如何将程序加载到内存中，参考9.8.1章节。每个进程都有自己的私有内存空间，如代码、数据段，堆栈等，也有共享空间就是链接库等。图9-31很不错。</li>
+<li>私有的写时复制是针对诸如共享的只读段，当想要修改时系统会产生一个副本，可以理解为按需分配。所以<code> fork</code>出来的子进程一开始和父进程是共享控制结构体、页表的，直到有一方试图进行修改。</li>
+</ul>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>按照书上隐式链表加三种分离方式实现了一种，然后又实现了一个分离链表的。</p>
+<ul>
+<li>隐式空闲链表，书中将一个每次分配的块，设置成有固定大小的4字节头节点和4字节尾节点，然后根据每个块的size，移动到下一个块，从而这里是连续的移动，并且用一种头尾节点来连接前后块，每次查找时，都是从哨兵开始，如果是已分配的则将标记位设为1，在查找过程中是整个块的线性长度，此为隐式链表</li>
+<li>显式空闲链表，在堆中显示的维护一个空闲链表块，每个块都有其头部，其中存储了它的size，如果需要一块内存，则直接在空闲链表块中查找看是否有合适的，如果有，则将此块从链表中删除，然后修复链表，这样的查找时间就是整个空闲链表的线性长度，此为显示链表</li>
+<li>分离空闲链表，专门维护多个链表，其大小分别是8的倍数;8,16,32,64,128…… 4096，然后将请求的size变成8的倍数，计算它应该所在的链表，然后看此链表中是否还有空闲块，如果没有，则重新申请一块，将剩下的编入到对应的空闲链表中;</li>
+</ul>
+<h3 id="隐式链表"><a href="#隐式链表" class="headerlink" title="隐式链表"></a>隐式链表</h3><h4 id="前置"><a href="#前置" class="headerlink" title="前置"></a>前置</h4><p>chunk结构：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">chunk的结构</span><br><span class="line">+-------------+</span><br><span class="line">| chunksize |<span class="number">0</span>|   &lt;- chunk size </span><br><span class="line">+-------------+</span><br><span class="line">|   (padding) |</span><br><span class="line">+-------------+</span><br><span class="line">|  chunksize|<span class="number">0</span>|   &lt;- chunk size，</span><br><span class="line">+-------------+</span><br></pre></td></tr></table></figure>
+<p>使用到的宏定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* single word (4) or double word (8) alignment */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ALIGNMENT 8</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* rounds up to the nearest multiple of ALIGNMENT */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ALIGN(size) (((size) + (ALIGNMENT-1)) &amp; ~0x7)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIZE_T_SIZE (ALIGN(sizeof(size_t)))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//字大小和双字大小</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WSIZE 4</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DSIZE 8</span></span><br><span class="line"><span class="comment">//当堆内存不够时，向内核申请的堆空间</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CHUNKSIZE (1&lt;&lt;12)</span></span><br><span class="line"><span class="comment">//将val放入p开始的4字节中</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PUT(p,val) (*(unsigned int*)(p) = (val))</span></span><br><span class="line"><span class="comment">//获得头部和脚部的编码</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PACK(size, alloc) ((size) | (alloc))</span></span><br><span class="line"><span class="comment">//从头部或尾部获得块大小和已分配位</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GET_SIZE(p) (*(unsigned int*)(p) &amp; ~0x7)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GET_ALLOC(p) (*(unsigned int*)(p) &amp; 0x1)</span></span><br><span class="line"><span class="comment">//获得块的头部和尾部</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> HDRP(bp) ((char*)(bp) - WSIZE)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FTRP(bp) ((char*)(bp) + GET_SIZE(HDRP(bp)) - DSIZE)</span></span><br><span class="line"><span class="comment">//获得上一个块和下一个块</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NEXT_BLKP(bp) ((char*)(bp) + GET_SIZE(HDRP(bp)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PREV_BLKP(bp) ((char*)(bp) - GET_SIZE((char*)(bp) - DSIZE))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX(x,y) ((x)&gt;(y)?(x):(y))</span></span><br></pre></td></tr></table></figure>
+<p>首先是<code>extend_heap</code>函数，用于扩展整个堆，用于初始化阶段和当分配算法无法用现有的堆分配出需要的chunk时。算出对齐字节后设置好头尾标志位，并设置下一个块为整个堆的尾块。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">extend_heap</span><span class="params">(<span class="keyword">size_t</span> words)</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>* bp;</span><br><span class="line">    <span class="keyword">size_t</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Allocate an even number of words to maintain alignment */</span></span><br><span class="line">    size = (words % <span class="number">2</span>) ? (words + <span class="number">1</span>) * WSIZE : words * WSIZE;</span><br><span class="line">    <span class="keyword">if</span> ((<span class="keyword">long</span>)(bp = mem_sbrk(size)) == <span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize free block header/footer and the epilogue header */</span></span><br><span class="line">    PUT(HDRP(bp), PACK(size, <span class="number">0</span>));   <span class="comment">// head</span></span><br><span class="line">    PUT(FTRP(bp), PACK(size, <span class="number">0</span>));   <span class="comment">// footer</span></span><br><span class="line">    PUT(HDRP(NEXT_BLKP(bp)), PACK(<span class="number">0</span>, <span class="number">1</span>));   <span class="comment">// new epilogue header</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> coalesce(bp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后是<code>coalesce</code>函数，用于合并堆块,按照书P596分情况讨论就行了，然后是对于nextfit需要注意合并的时候判断是否修改相关指针。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">coalesce</span><span class="params">(<span class="keyword">void</span> *ptr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> size = GET_SIZE(HDRP(ptr));</span><br><span class="line">    <span class="keyword">size_t</span> is_prev_alloc = GET_ALLOC(HDRP(PREV_BLKP(ptr)));</span><br><span class="line">    <span class="keyword">size_t</span> is_next_alloc = GET_ALLOC(HDRP(NEXT_BLKP(ptr)));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (is_prev_alloc &amp;&amp; is_next_alloc)&#123;</span><br><span class="line">        <span class="keyword">return</span> ptr;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (is_prev_alloc &amp;&amp; !is_next_alloc)&#123; <span class="comment">// next</span></span><br><span class="line">        size += GET_SIZE(HDRP(NEXT_BLKP(ptr)));</span><br><span class="line">        PUT(HDRP(ptr), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(ptr), PACK(size, <span class="number">0</span>));</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!is_prev_alloc &amp;&amp; is_next_alloc)&#123; <span class="comment">// pre</span></span><br><span class="line">        size += GET_SIZE(HDRP(PREV_BLKP(ptr)));</span><br><span class="line">        PUT(FTRP(ptr), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(ptr)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        ptr = PREV_BLKP(ptr);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">//all</span></span><br><span class="line">        size += GET_SIZE(HDRP(PREV_BLKP(ptr))) + GET_SIZE(HDRP(NEXT_BLKP(ptr)));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(ptr)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(NEXT_BLKP(ptr)), PACK(size, <span class="number">0</span>));</span><br><span class="line">        ptr = PREV_BLKP(ptr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for next_fit</span></span><br><span class="line">    <span class="keyword">if</span> (pre_listp &gt; ptr &amp;&amp; pre_listp &lt; NEXT_BLKP(ptr))</span><br><span class="line">            pre_listp = ptr;</span><br><span class="line">    <span class="keyword">return</span> ptr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来是<code>place</code>函数，判断选中的chunk是直接分出去还是可以切割。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">place</span><span class="params">(<span class="keyword">void</span> *bp, <span class="keyword">size_t</span> asize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> remain_size;</span><br><span class="line">    remain_size = GET_SIZE(HDRP(bp)) - asize;</span><br><span class="line">    <span class="comment">//如果剩余空间满足最小块大小，就将其作为一个新的空闲块</span></span><br><span class="line">    <span class="keyword">if</span>(remain_size &gt;= DSIZE)&#123;</span><br><span class="line">        PUT(HDRP(bp), PACK(asize, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(asize, <span class="number">1</span>));</span><br><span class="line">        PUT(HDRP(NEXT_BLKP(bp)), PACK(remain_size, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(NEXT_BLKP(bp)), PACK(remain_size, <span class="number">0</span>));</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        PUT(HDRP(bp), PACK(GET_SIZE(HDRP(bp)), <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(bp), PACK(GET_SIZE(HDRP(bp)), <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="匹配算法"><a href="#匹配算法" class="headerlink" title="匹配算法"></a>匹配算法</h4><p>首先是<code>first_fit</code>，顺序遍历所有chunk，找到是否有比目标大小大的chunk。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">first_fit</span><span class="params">(<span class="keyword">size_t</span> asize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *bp = heap_listp;</span><br><span class="line">    <span class="keyword">size_t</span> size;</span><br><span class="line">    <span class="keyword">while</span>((size = GET_SIZE(HDRP(bp))) != <span class="number">0</span>)&#123;    <span class="comment">//遍历全部块</span></span><br><span class="line">        <span class="keyword">if</span>(size &gt;= asize &amp;&amp; !GET_ALLOC(HDRP(bp)))    <span class="comment">//寻找大小大于asize的空闲块</span></span><br><span class="line">            <span class="keyword">return</span> bp;</span><br><span class="line">        bp = NEXT_BLKP(bp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>然后是<code>next_fit</code>，下一次适配和首次适配很类似，首次适配是从空闲链表头开始寻找，下一次适配是从上一次分配的地方开始搜索。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">next_fit</span><span class="params">(<span class="keyword">size_t</span> asize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span>* bp = pre_listp; GET_SIZE(HDRP(bp)) &gt; <span class="number">0</span>; bp = NEXT_BLKP(bp))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!GET_ALLOC(HDRP(bp)) &amp;&amp; GET_SIZE(HDRP(bp)) &gt;= asize)</span><br><span class="line">        &#123;</span><br><span class="line">            pre_listp = bp;</span><br><span class="line">            <span class="keyword">return</span> bp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span>* bp = heap_listp; bp != pre_listp; bp = NEXT_BLKP(bp))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!GET_ALLOC(HDRP(bp)) &amp;&amp; GET_SIZE(HDRP(bp)) &gt;= asize)</span><br><span class="line">        &#123;</span><br><span class="line">            pre_listp = bp;</span><br><span class="line">            <span class="keyword">return</span> bp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后是<code>best_fit</code>，就是找到空闲尺寸最符合的，这样的空间利用率是最高的，但是时间复杂度也会上升。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">best_fit</span><span class="params">(<span class="keyword">size_t</span> asize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *bp = heap_listp;</span><br><span class="line">    <span class="keyword">size_t</span> size;</span><br><span class="line">    <span class="keyword">void</span> *best = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">size_t</span> min_size = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>((size = GET_SIZE(HDRP(bp))) != <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(size &gt;= asize &amp;&amp; !GET_ALLOC(HDRP(bp)) &amp;&amp; (min_size == <span class="number">0</span> || min_size&gt;size))&#123;   <span class="comment">//记录最小的合适的空闲块</span></span><br><span class="line">            min_size = size;</span><br><span class="line">            best = bp;</span><br><span class="line">        &#125;</span><br><span class="line">        bp = NEXT_BLKP(bp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> best;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<h4 id="主函数"><a href="#主函数" class="headerlink" title="主函数"></a>主函数</h4><p>初始化阶段要设置序言块，为一个填冲块，一个头加一个空的尾块，然后将其扩展。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * mm_init - initialize the malloc package.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mm_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((heap_listp = mem_sbrk(<span class="number">4</span>*WSIZE)) == (<span class="keyword">void</span> *)<span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    PUT(heap_listp, <span class="number">0</span>); <span class="comment">//padding</span></span><br><span class="line">    PUT(heap_listp+<span class="number">1</span>*WSIZE, PACK(DSIZE, <span class="number">1</span>));    <span class="comment">//head</span></span><br><span class="line">    PUT(heap_listp+<span class="number">2</span>*WSIZE, PACK(DSIZE, <span class="number">1</span>));    <span class="comment">//footer</span></span><br><span class="line">    PUT(heap_listp+<span class="number">3</span>*WSIZE, PACK(<span class="number">0</span>, <span class="number">1</span>));</span><br><span class="line">    </span><br><span class="line">    heap_listp += DSIZE;    <span class="comment">//指向序言块有效载荷的指针</span></span><br><span class="line">    pre_listp = heap_listp;</span><br><span class="line">    <span class="keyword">if</span>(extend_heap(CHUNKSIZE/WSIZE) == <span class="literal">NULL</span>)    <span class="comment">//申请更多的堆空间</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>malloc手先计算对齐好的size，再进行匹配并分配即可。如果空闲块无法分配就向系统再申请就是了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * mm_malloc - Allocate a block by incrementing the brk pointer.</span></span><br><span class="line"><span class="comment"> *     Always allocate a block whose size is a multiple of the alignment.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mm_malloc</span><span class="params">(<span class="keyword">size_t</span> size)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> asize; <span class="comment">// adjusted block size</span></span><br><span class="line">    <span class="keyword">size_t</span> extendsize; <span class="comment">// amount to extend heap if no fit</span></span><br><span class="line">    <span class="keyword">char</span> *bp;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// count size first</span></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size &lt;= DSIZE)</span><br><span class="line">        asize = <span class="number">2</span>*DSIZE;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        asize = DSIZE * ((size + (DSIZE) + (DSIZE - <span class="number">1</span>)) / DSIZE);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((bp = next_fit(asize)) != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        place(bp, asize);</span><br><span class="line">        <span class="keyword">return</span> bp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    extendsize = MAX(asize, CHUNKSIZE);</span><br><span class="line">    <span class="keyword">if</span> ((bp = extend_heap(extendsize / WSIZE)) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    place(bp, asize);</span><br><span class="line">    <span class="keyword">return</span> bp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>free只需设置好标志位，然后送入合并即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * mm_free - Freeing a block does nothing.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mm_free</span><span class="params">(<span class="keyword">void</span> *ptr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> size = GET_SIZE(HDRP(ptr));</span><br><span class="line"></span><br><span class="line">    PUT(HDRP(ptr), PACK(size, <span class="number">0</span>));</span><br><span class="line">    PUT(FTRP(ptr), PACK(size, <span class="number">0</span>));</span><br><span class="line">    coalesce(ptr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>realloc的思路是分配新的块，然后复制过去，free旧的块。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * mm_realloc - Implemented simply in terms of mm_malloc and mm_free</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mm_realloc</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *oldptr = ptr;</span><br><span class="line">    <span class="keyword">void</span> *newptr;</span><br><span class="line">    <span class="keyword">size_t</span> copySize;</span><br><span class="line"></span><br><span class="line">    newptr = mm_malloc(size);</span><br><span class="line">    <span class="keyword">if</span> (newptr == <span class="literal">NULL</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    size = GET_SIZE(HDRP(oldptr));</span><br><span class="line">    copySize = GET_SIZE(HDRP(newptr));</span><br><span class="line">    <span class="keyword">if</span> (size &lt; copySize)</span><br><span class="line">      copySize = size;</span><br><span class="line">    <span class="built_in">memcpy</span>(newptr, oldptr, copySize-WSIZE);</span><br><span class="line">    mm_free(oldptr);</span><br><span class="line">    <span class="keyword">return</span> newptr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="分离适配"><a href="#分离适配" class="headerlink" title="分离适配"></a>分离适配</h3><h4 id="前置-1"><a href="#前置-1" class="headerlink" title="前置"></a>前置</h4><p>chunk结构：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">chunk的结构</span><br><span class="line">+-------------+</span><br><span class="line">| chunksize |<span class="number">0</span>|   &lt;- chunk size </span><br><span class="line">+-------------+</span><br><span class="line">|      FD     |</span><br><span class="line">|      BK     |</span><br><span class="line">|   (padding) |</span><br><span class="line">+-------------+</span><br><span class="line">|  chunksize|<span class="number">0</span>|   &lt;- chunk size，</span><br><span class="line">+-------------+</span><br></pre></td></tr></table></figure>
+<p>比前一个多用到的宏定义:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获得块中记录后继和前驱的地址</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FD(ptr) (*(char **)(ptr))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BK(ptr) (*(char **)(BK_PTR(ptr)))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FD_PTR(ptr) ((char *)(ptr))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BK_PTR(ptr) ((char *)(ptr) + WSIZE)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SET_PTR(p, ptr) (*(unsigned int *)(p) = (unsigned int)(ptr))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ListMax 16</span></span><br></pre></td></tr></table></figure>
+<p>解释一下，<code>FD,BK</code>用来遍历，<code>FD_PTR,BK_PTR</code>用来赋值。<br>还有这些：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">heap_extension</span><span class="params">(<span class="keyword">size_t</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">coalesce</span><span class="params">(<span class="keyword">void</span> *ptr)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insert_node</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">delete_node</span><span class="params">(<span class="keyword">void</span> *ptr)</span></span>;</span><br><span class="line"><span class="keyword">void</span> *free_lists[ListMax];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;c</span><br><span class="line">static void *heap_extension(size_t size)&#123;</span><br><span class="line">    void *ptr;</span><br><span class="line">    size &#x3D; ALIGN(size);</span><br><span class="line">    if ((ptr &#x3D; mem_sbrk(size)) &#x3D;&#x3D; (void *)-1)</span><br><span class="line">        return NULL;</span><br><span class="line"></span><br><span class="line">    PUT(HDRP(ptr), PACK(size, 0));</span><br><span class="line">    PUT(FTRP(ptr), PACK(size, 0));</span><br><span class="line">    </span><br><span class="line">    PUT(HDRP(NEXT_BLKP(ptr)), PACK(0, 1));</span><br><span class="line">    </span><br><span class="line">    insert_node(ptr, size);</span><br><span class="line">    </span><br><span class="line">    return coalesce(ptr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static void *coalesce(void *ptr)&#123;</span><br><span class="line">    size_t size &#x3D; GET_SIZE(HDRP(ptr));</span><br><span class="line">    size_t is_prev_alloc &#x3D; GET_ALLOC(HDRP(PREV_BLKP(ptr)));</span><br><span class="line">    size_t is_next_alloc &#x3D; GET_ALLOC(HDRP(NEXT_BLKP(ptr)));</span><br><span class="line">    if (is_prev_alloc &amp;&amp; is_next_alloc)&#123;</span><br><span class="line">        return ptr;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (is_prev_alloc &amp;&amp; !is_next_alloc)&#123;</span><br><span class="line">        delete_node(ptr);</span><br><span class="line">        delete_node(NEXT_BLKP(ptr));</span><br><span class="line">        size +&#x3D; GET_SIZE(HDRP(NEXT_BLKP(ptr)));</span><br><span class="line">        PUT(HDRP(ptr), PACK(size, 0));</span><br><span class="line">        PUT(FTRP(ptr), PACK(size, 0));</span><br><span class="line">    &#125;</span><br><span class="line">    else if (!is_prev_alloc &amp;&amp; is_next_alloc)&#123;</span><br><span class="line">        delete_node(ptr);</span><br><span class="line">        delete_node(PREV_BLKP(ptr));</span><br><span class="line">        size +&#x3D; GET_SIZE(HDRP(PREV_BLKP(ptr)));</span><br><span class="line">        PUT(FTRP(ptr), PACK(size, 0));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(ptr)), PACK(size, 0));</span><br><span class="line">        ptr &#x3D; PREV_BLKP(ptr);</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        delete_node(ptr);</span><br><span class="line">        delete_node(PREV_BLKP(ptr));</span><br><span class="line">        delete_node(NEXT_BLKP(ptr));</span><br><span class="line">        size +&#x3D; GET_SIZE(HDRP(PREV_BLKP(ptr))) + GET_SIZE(HDRP(NEXT_BLKP(ptr)));</span><br><span class="line">        PUT(HDRP(PREV_BLKP(ptr)), PACK(size, 0));</span><br><span class="line">        PUT(FTRP(NEXT_BLKP(ptr)), PACK(size, 0));</span><br><span class="line">        ptr &#x3D; PREV_BLKP(ptr);</span><br><span class="line">    &#125;</span><br><span class="line">    insert_node(ptr, size);</span><br><span class="line">    return ptr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>链表操作如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insert_node</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">void</span> *search = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">void</span> *insert = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((i &lt; <span class="number">15</span>) &amp;&amp; (size &gt; <span class="number">1</span>))&#123;</span><br><span class="line">        size &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    search = free_lists[i];</span><br><span class="line">    <span class="keyword">while</span> ((search != <span class="literal">NULL</span>) &amp;&amp; (size &gt; GET_SIZE(HDRP(search))))&#123;</span><br><span class="line">        insert = search;</span><br><span class="line">        search = FD(search);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (search != <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (insert != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="comment">// insert &lt; ptr &lt; search</span></span><br><span class="line">            SET_PTR(FD_PTR(ptr), search);</span><br><span class="line">            SET_PTR(BK_PTR(ptr), insert);</span><br><span class="line">            SET_PTR(FD_PTR(insert), ptr);</span><br><span class="line">            SET_PTR(BK_PTR(search), ptr);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// place ptr at first</span></span><br><span class="line">            SET_PTR(FD_PTR(ptr), search);</span><br><span class="line">            SET_PTR(BK_PTR(search), ptr);</span><br><span class="line">            SET_PTR(BK_PTR(ptr), <span class="literal">NULL</span>);</span><br><span class="line">            free_lists[i] = ptr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (insert != <span class="literal">NULL</span>)&#123; </span><br><span class="line">            <span class="comment">// place ptr at last</span></span><br><span class="line">            SET_PTR(FD_PTR(ptr), <span class="literal">NULL</span>);</span><br><span class="line">            SET_PTR(BK_PTR(ptr), insert);</span><br><span class="line">            SET_PTR(FD_PTR(insert), ptr);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123; </span><br><span class="line">            <span class="comment">// bin is free</span></span><br><span class="line">            SET_PTR(FD_PTR(ptr), <span class="literal">NULL</span>);</span><br><span class="line">            SET_PTR(BK_PTR(ptr), <span class="literal">NULL</span>);</span><br><span class="line">            free_lists[i] = ptr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// unlink</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">delete_node</span><span class="params">(<span class="keyword">void</span> *ptr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">size_t</span> size = GET_SIZE(HDRP(ptr));</span><br><span class="line">    <span class="keyword">while</span> ((i &lt; <span class="number">15</span>) &amp;&amp; (size &gt; <span class="number">1</span>))&#123;</span><br><span class="line">        size &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (FD(ptr) != <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (BK(ptr) != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            SET_PTR(BK_PTR(FD(ptr)), BK(ptr));</span><br><span class="line">            SET_PTR(FD_PTR(BK(ptr)), FD(ptr));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            SET_PTR(BK_PTR(FD(ptr)), <span class="literal">NULL</span>);</span><br><span class="line">            free_lists[i] = FD(ptr);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (BK(ptr) != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            SET_PTR(FD_PTR(BK(ptr)), <span class="literal">NULL</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            free_lists[i] = <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分配算法如下，可以看出是遍历FD指针的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">place</span><span class="params">(<span class="keyword">void</span>* ptr, <span class="keyword">size_t</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> ptr_size = GET_SIZE(HDRP(ptr));</span><br><span class="line">    <span class="keyword">size_t</span> remainder = ptr_size - size;</span><br><span class="line"></span><br><span class="line">    delete_node(ptr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (remainder &lt; DSIZE * <span class="number">2</span>) &#123;</span><br><span class="line">        PUT(HDRP(ptr), PACK(ptr_size, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(ptr), PACK(ptr_size, <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        PUT(HDRP(ptr), PACK(size, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(ptr), PACK(size, <span class="number">1</span>));</span><br><span class="line">        PUT(HDRP(NEXT_BLKP(ptr)), PACK(remainder, <span class="number">0</span>));</span><br><span class="line">        PUT(FTRP(NEXT_BLKP(ptr)), PACK(remainder, <span class="number">0</span>));</span><br><span class="line">        insert_node(NEXT_BLKP(ptr), remainder);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ptr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">first_fit</span><span class="params">(<span class="keyword">size_t</span> size)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> size_temp = size;</span><br><span class="line">    <span class="keyword">void</span> *ptr = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; ListMax;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span> (((size_temp &lt;= <span class="number">1</span>) &amp;&amp; (free_lists[i] != <span class="literal">NULL</span>)))&#123;</span><br><span class="line">            ptr = free_lists[i];</span><br><span class="line">            <span class="keyword">while</span> ((ptr != <span class="literal">NULL</span>) &amp;&amp; ((size &gt; GET_SIZE(HDRP(ptr)))))&#123;</span><br><span class="line">                ptr = FD(ptr);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (ptr != <span class="literal">NULL</span>)</span><br><span class="line">                <span class="keyword">return</span> ptr;</span><br><span class="line">        &#125;</span><br><span class="line">        size_temp &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<h4 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h4><p>realloc疯狂err，最后还是借鉴了别人的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mm_init</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *heap; </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">0</span> ; i &lt; ListMax; i++)</span><br><span class="line">        free_lists[i] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((<span class="keyword">long</span>)(heap = mem_sbrk(<span class="number">4</span>*WSIZE)) == <span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>; </span><br><span class="line">          </span><br><span class="line">    PUT(heap, <span class="number">0</span>);</span><br><span class="line">    PUT(heap + <span class="number">4</span>, <span class="number">9</span>);</span><br><span class="line">    PUT(heap + <span class="number">8</span>, <span class="number">9</span>);</span><br><span class="line">    PUT(heap + <span class="number">12</span>, <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (heap_extension(<span class="number">64</span>) == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mm_malloc</span><span class="params">(<span class="keyword">size_t</span> size)</span></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *ptr = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span> (size &lt;= <span class="number">8</span>)</span><br><span class="line">        size = <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        size = ALIGN(size + <span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (((ptr = first_fit(size))) == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> ((ptr = heap_extension(MAX(size, CHUNKSIZE))) == <span class="literal">NULL</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    place(ptr, size);</span><br><span class="line">    <span class="keyword">return</span> ptr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mm_free</span><span class="params">(<span class="keyword">void</span> *ptr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> size = GET_SIZE(HDRP(ptr));</span><br><span class="line"></span><br><span class="line">    PUT(HDRP(ptr), PACK(size, <span class="number">0</span>));</span><br><span class="line">    PUT(FTRP(ptr), PACK(size, <span class="number">0</span>));</span><br><span class="line">    </span><br><span class="line">    insert_node(ptr, size);  </span><br><span class="line">    coalesce(ptr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mm_realloc</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size)</span></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *nblock = ptr;</span><br><span class="line">    <span class="keyword">int</span> reamin;</span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span> (size &lt;= <span class="number">8</span>)&#123;</span><br><span class="line">        size = <span class="number">16</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        size = ALIGN(size + <span class="number">8</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ((reamin = GET_SIZE(HDRP(ptr)) - size) &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> ptr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!GET_ALLOC(HDRP(NEXT_BLKP(ptr))) || !GET_SIZE(HDRP(NEXT_BLKP(ptr))))&#123;</span><br><span class="line">        <span class="keyword">if</span> ((reamin = GET_SIZE(HDRP(ptr)) + GET_SIZE(HDRP(NEXT_BLKP(ptr))) - size) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (heap_extension(MAX(-reamin, CHUNKSIZE)) == <span class="literal">NULL</span>)</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">            reamin += MAX(-reamin, CHUNKSIZE);</span><br><span class="line">        &#125;</span><br><span class="line">        delete_node(NEXT_BLKP(ptr));</span><br><span class="line">        PUT(HDRP(ptr), PACK(size + reamin, <span class="number">1</span>));</span><br><span class="line">        PUT(FTRP(ptr), PACK(size + reamin, <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        nblock = mm_malloc(size);</span><br><span class="line">        <span class="built_in">memcpy</span>(nblock, ptr, GET_SIZE(HDRP(ptr)));</span><br><span class="line">        mm_free(ptr);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> nblock;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><p>还缺少必要的报错信息，一切的安全检查。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.resery.top/2020/07/30/CSAPP%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%8C)/">http://www.resery.top/2020/07/30/CSAPP%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E5%8D%81%E4%BA%8C)/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.notion.so/CSAPP-Malloclab-d9adc42d5a5042faae2730365b58afff">https://www.notion.so/CSAPP-Malloclab-d9adc42d5a5042faae2730365b58afff</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/csapp/" rel="tag"># csapp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/12/2021/csapp-arch-lab/" rel="prev" title="csapp arch lab">
+      <i class="fa fa-chevron-left"></i> csapp arch lab
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/01/2021/idapython%E7%AC%94%E8%AE%B0/" rel="next" title="idapython笔记">
+      idapython笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#csapp-malloc-lab"><span class="nav-number">1.</span> <span class="nav-text">csapp malloc lab</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%AE%BA"><span class="nav-number">1.1.</span> <span class="nav-text">理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.2.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E9%93%BE%E8%A1%A8"><span class="nav-number">1.2.1.</span> <span class="nav-text">隐式链表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">前置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">匹配算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">主函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%A6%BB%E9%80%82%E9%85%8D"><span class="nav-number">1.2.2.</span> <span class="nav-text">分离适配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE-1"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">前置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">核心</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO"><span class="nav-number">1.3.</span> <span class="nav-text">TODO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.4.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DaiDai"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">DaiDai</p>
+  <div class="site-description" itemprop="description">never stop learning</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://m3wsec.github.io/" title="http:&#x2F;&#x2F;m3wsec.github.io" rel="noopener" target="_blank">m3w</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/qq_46091464" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_46091464" rel="noopener" target="_blank">Firebasky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/erR0Ratao" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;erR0Ratao" rel="noopener" target="_blank">atao</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.d1a0.cn/" title="https:&#x2F;&#x2F;www.d1a0.cn&#x2F;" rel="noopener" target="_blank">d1a0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/anweilx/" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;anweilx&#x2F;" rel="noopener" target="_blank">anweilx</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://me.csdn.net/Kroner" title="https:&#x2F;&#x2F;me.csdn.net&#x2F;Kroner" rel="noopener" target="_blank">No</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/Amherstieae" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;Amherstieae" rel="noopener" target="_blank">beta</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.y4tacker.top/" title="http:&#x2F;&#x2F;blog.y4tacker.top" rel="noopener" target="_blank">Y4tacker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://yq1ng.github.io/" title="http:&#x2F;&#x2F;yq1ng.github.io" rel="noopener" target="_blank">yq1ng</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://snowywar.top/wordpress" title="http:&#x2F;&#x2F;snowywar.top&#x2F;wordpress" rel="noopener" target="_blank">snowy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.sy4.top/" title="https:&#x2F;&#x2F;www.sy4.top&#x2F;" rel="noopener" target="_blank">picnic</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://justloseit.top/" title="http:&#x2F;&#x2F;justloseit.top&#x2F;" rel="noopener" target="_blank">Joker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://s0uthwood.github.io/" title="https:&#x2F;&#x2F;s0uthwood.github.io&#x2F;" rel="noopener" target="_blank">s0uthwood</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kfxp12138.github.io/" title="https:&#x2F;&#x2F;kfxp12138.github.io&#x2F;" rel="noopener" target="_blank">triplewing</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaiDai</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">197k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:59</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

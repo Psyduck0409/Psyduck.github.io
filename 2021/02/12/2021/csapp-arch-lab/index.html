@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lazydaidai.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="csapp arch lab写汇编，写硬件，优化，硬核了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="csapp arch lab">
+<meta property="og:url" content="https://lazydaidai.github.io/2021/02/12/2021/csapp-arch-lab/index.html">
+<meta property="og:site_name" content="DaiDai&#39;s blog">
+<meta property="og:description" content="csapp arch lab写汇编，写硬件，优化，硬核了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-11T16:01:21.000Z">
+<meta property="article:modified_time" content="2021-02-13T19:04:24.526Z">
+<meta property="article:author" content="DaiDai">
+<meta property="article:tag" content="csapp">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lazydaidai.github.io/2021/02/12/2021/csapp-arch-lab/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>csapp arch lab | DaiDai's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DaiDai's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lazydaidai.github.io/2021/02/12/2021/csapp-arch-lab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="DaiDai">
+      <meta itemprop="description" content="never stop learning">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DaiDai's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          csapp arch lab
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-12 00:01:21" itemprop="dateCreated datePublished" datetime="2021-02-12T00:01:21+08:00">2021-02-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-14 03:04:24" itemprop="dateModified" datetime="2021-02-14T03:04:24+08:00">2021-02-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/code/" itemprop="url" rel="index"><span itemprop="name">code</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="csapp-arch-lab"><a href="#csapp-arch-lab" class="headerlink" title="csapp arch lab"></a>csapp arch lab</h1><p>写汇编，写硬件，优化，硬核了。</p>
+<a id="more"></a>
+<h2 id="part-A"><a href="#part-A" class="headerlink" title="part A"></a>part A</h2><p>将example.c中的三个函数写成汇编形式，参考书上图4-7求和的汇编代码开始肝。</p>
+<h3 id="sum"><a href="#sum" class="headerlink" title="sum"></a>sum</h3><p>函数如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* sum_list - Sum the elements of a linked list */</span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">sum_list</span><span class="params">(list_ptr ls)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> val = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (ls) &#123;</span><br><span class="line">	val += ls-&gt;val;</span><br><span class="line">	ls = ls-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个只要简单修改（删除）几行就行了，但是书上的代码没有压栈，想了想还是加上去了：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Executions begins at address 0</span></span><br><span class="line">    <span class="string">.pos</span> <span class="number">0</span> </span><br><span class="line">    <span class="string">irmovq</span> <span class="string">stack,%rsp</span> <span class="comment"># stack point</span></span><br><span class="line">    <span class="string">call</span> <span class="string">main</span></span><br><span class="line">    <span class="string">halt</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Sample linked list</span></span><br><span class="line">    <span class="string">.align</span> <span class="number">8</span></span><br><span class="line"><span class="attr">ele1:</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x00a</span></span><br><span class="line">    <span class="string">.quad</span> <span class="string">ele2</span></span><br><span class="line"><span class="attr">ele2:</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x0b0</span></span><br><span class="line">    <span class="string">.quad</span> <span class="string">ele3</span></span><br><span class="line"><span class="attr">ele3:</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0xc00</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="attr">main:</span></span><br><span class="line">    <span class="string">irmovq</span> <span class="string">ele1,%rdi</span></span><br><span class="line">    <span class="string">call</span> <span class="string">sum_list</span></span><br><span class="line">    <span class="string">ret</span></span><br><span class="line"></span><br><span class="line"><span class="attr">sum_list:</span></span><br><span class="line">    <span class="string">pushq</span> <span class="string">%rbx</span></span><br><span class="line">    <span class="string">xorq</span> <span class="string">%rax,%rax</span></span><br><span class="line">    <span class="string">irmovq</span> <span class="string">$8,%r8</span></span><br><span class="line">    <span class="string">jmp</span> <span class="string">test</span></span><br><span class="line"><span class="attr">loop:</span></span><br><span class="line">    <span class="string">mrmovq</span> <span class="string">(%rdi),%r10</span></span><br><span class="line">    <span class="string">addq</span> <span class="string">%r10,%rax</span></span><br><span class="line">    <span class="string">addq</span> <span class="string">%r8,%rdi</span></span><br><span class="line">    <span class="string">mrmovq</span> <span class="string">(%rdi),%rdi</span></span><br><span class="line"><span class="attr">test:</span></span><br><span class="line">    <span class="string">andq</span> <span class="string">%rdi,%rdi</span></span><br><span class="line">    <span class="string">jne</span> <span class="string">loop</span></span><br><span class="line">    <span class="string">popq</span> <span class="string">%rbx</span></span><br><span class="line">    <span class="string">ret</span></span><br><span class="line"></span><br><span class="line">    <span class="string">.pos</span> <span class="number">0x200</span></span><br><span class="line"><span class="attr">stack:</span></span><br></pre></td></tr></table></figure>
+<h3 id="rsum"><a href="#rsum" class="headerlink" title="rsum"></a>rsum</h3><p>递归，参考书P175<br>源代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* sum_list - Sum the elements of a linked list */</span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">sum_list</span><span class="params">(list_ptr ls)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> val = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (ls) &#123;</span><br><span class="line">	val += ls-&gt;val;</span><br><span class="line">	ls = ls-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应汇编：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Executions begins at address 0</span></span><br><span class="line">    <span class="string">.pos</span> <span class="number">0</span> </span><br><span class="line">    <span class="string">irmovq</span> <span class="string">stack,%rsp</span> <span class="comment"># stack point</span></span><br><span class="line">    <span class="string">call</span> <span class="string">main</span></span><br><span class="line">    <span class="string">halt</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Sample linked list</span></span><br><span class="line">    <span class="string">.align</span> <span class="number">8</span></span><br><span class="line"><span class="attr">ele1:</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x00a</span></span><br><span class="line">    <span class="string">.quad</span> <span class="string">ele2</span></span><br><span class="line"><span class="attr">ele2:</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x0b0</span></span><br><span class="line">    <span class="string">.quad</span> <span class="string">ele3</span></span><br><span class="line"><span class="attr">ele3:</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0xc00</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="attr">main:</span></span><br><span class="line">    <span class="string">irmovq</span> <span class="string">ele1,%rdi</span></span><br><span class="line">    <span class="string">call</span> <span class="string">rsum_list</span></span><br><span class="line">    <span class="string">ret</span></span><br><span class="line"></span><br><span class="line"><span class="attr">rsum_list:</span></span><br><span class="line">    <span class="string">pushq</span> <span class="string">%rbx</span></span><br><span class="line">    <span class="string">xorq</span> <span class="string">%rax,</span> <span class="string">%rax</span></span><br><span class="line">    <span class="string">andq</span> <span class="string">%rdi,</span> <span class="string">%rdi</span></span><br><span class="line">    <span class="string">je</span> <span class="string">return</span></span><br><span class="line">    <span class="string">mrmovq</span> <span class="string">(%rdi),</span> <span class="string">%rbx</span></span><br><span class="line">    <span class="string">mrmovq</span> <span class="number">8</span><span class="string">(%rdi),</span> <span class="string">%rdi</span></span><br><span class="line">    <span class="string">call</span> <span class="string">rsum_list</span></span><br><span class="line">    <span class="string">addq</span> <span class="string">%rbx,</span> <span class="string">%rax</span></span><br><span class="line"></span><br><span class="line"><span class="attr">return:</span></span><br><span class="line">    <span class="string">popq</span> <span class="string">%rbx</span></span><br><span class="line">    <span class="string">ret</span></span><br><span class="line"></span><br><span class="line">    <span class="string">.pos</span> <span class="number">0x200</span></span><br><span class="line"><span class="attr">stack:</span></span><br></pre></td></tr></table></figure>
+<h3 id="copy-block"><a href="#copy-block" class="headerlink" title="copy_block"></a>copy_block</h3><p>源码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* copy_block - Copy src to dest and return xor checksum of src */</span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">copy_block</span><span class="params">(<span class="keyword">long</span> *src, <span class="keyword">long</span> *dest, <span class="keyword">long</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (len &gt; <span class="number">0</span>) &#123;</span><br><span class="line">	<span class="keyword">long</span> val = *src++;</span><br><span class="line">	*dest++ = val;</span><br><span class="line">	result ^= val;</span><br><span class="line">	len--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>汇编如下:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Executions begins at address 0</span></span><br><span class="line">    <span class="string">.pos</span> <span class="number">0</span> </span><br><span class="line">    <span class="string">irmovq</span> <span class="string">stack,%rsp</span> <span class="comment"># stack point</span></span><br><span class="line">    <span class="string">call</span> <span class="string">main</span></span><br><span class="line">    <span class="string">halt</span></span><br><span class="line"></span><br><span class="line">    <span class="string">.align</span> <span class="number">8</span></span><br><span class="line"><span class="comment"># Source block</span></span><br><span class="line"><span class="attr">src:</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x00a</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x0b0</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0xc00</span></span><br><span class="line"><span class="comment"># Destination block</span></span><br><span class="line"><span class="attr">dest:</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x111</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x222</span></span><br><span class="line">    <span class="string">.quad</span> <span class="number">0x333</span></span><br><span class="line"></span><br><span class="line"><span class="attr">main:</span></span><br><span class="line">    <span class="string">irmovq</span> <span class="string">src,%rdi</span></span><br><span class="line">    <span class="string">irmovq</span> <span class="string">dest,%rsi</span></span><br><span class="line">    <span class="string">irmovq</span> <span class="string">$3,%rdx</span>   </span><br><span class="line">    <span class="string">call</span> <span class="string">copy_block</span></span><br><span class="line">    <span class="string">ret</span></span><br><span class="line"></span><br><span class="line"><span class="attr">copy_block:</span></span><br><span class="line">    <span class="string">pushq</span> <span class="string">%r8</span></span><br><span class="line">    <span class="string">pushq</span> <span class="string">%r9</span></span><br><span class="line">    <span class="string">pushq</span> <span class="string">%rbx</span></span><br><span class="line">    <span class="string">irmovq</span> <span class="string">$8,%r8</span></span><br><span class="line">    <span class="string">irmovq</span> <span class="string">$1,%r9</span></span><br><span class="line">    <span class="string">xorq</span> <span class="string">%rax,%rax</span></span><br><span class="line">    <span class="string">andq</span> <span class="string">%rdx,%rdx</span>  <span class="comment"># Set CC</span></span><br><span class="line">    <span class="string">jmp</span> <span class="string">test</span></span><br><span class="line"><span class="attr">loop:</span></span><br><span class="line">    <span class="string">mrmovq</span> <span class="string">(%rdi),%rbx</span></span><br><span class="line">    <span class="string">xorq</span> <span class="string">%rbx,%rax</span>  <span class="comment"># res ^= val</span></span><br><span class="line">    <span class="string">rmmovq</span> <span class="string">%rbx,(%rsi)</span></span><br><span class="line">    <span class="string">addq</span> <span class="string">%r8,%rdi</span>   <span class="comment"># src++</span></span><br><span class="line">    <span class="string">addq</span> <span class="string">%r8,%rsi</span>   <span class="comment"># dest++</span></span><br><span class="line">    <span class="string">subq</span> <span class="string">%r9,%rdx</span>   <span class="comment"># len--</span></span><br><span class="line"><span class="attr">test:</span></span><br><span class="line">    <span class="string">jne</span> <span class="string">loop</span></span><br><span class="line">    <span class="string">popq</span> <span class="string">%rbx</span></span><br><span class="line">    <span class="string">popq</span> <span class="string">%r9</span></span><br><span class="line">    <span class="string">popq</span> <span class="string">%r8</span></span><br><span class="line">    <span class="string">ret</span></span><br><span class="line"></span><br><span class="line">    <span class="string">.pos</span> <span class="number">0x200</span></span><br><span class="line"><span class="attr">stack:</span></span><br></pre></td></tr></table></figure>
+<h2 id="part-B"><a href="#part-B" class="headerlink" title="part B"></a>part B</h2><p>增加IIADDQ，这里踩坑说tk.h没有，装了也没用，最后查了一下在makefile里注释了这一行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># GUIMODE=-DHAS_GUI</span></span><br></pre></td></tr></table></figure>
+<p>然后测试出错之后一顿修改忘记make，纳闷半天哪儿错了。。最终结果如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> instr_valid = icode in </span><br><span class="line">	&#123; INOP, IHALT, IRRMOVQ, IIRMOVQ, IRMMOVQ, IMRMOVQ,</span><br><span class="line">	       IOPQ, IJXX, ICALL, IRET, IPUSHQ, IPOPQ, IIADDQ &#125;;</span><br><span class="line"></span><br><span class="line"># Does fetched instruction require a regid byte?</span><br><span class="line"><span class="keyword">bool</span> need_regids =</span><br><span class="line">	icode in &#123; IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, </span><br><span class="line">		     IIRMOVQ, IRMMOVQ, IMRMOVQ, IIADDQ &#125;;</span><br><span class="line"></span><br><span class="line"># Does fetched instruction require a constant word?</span><br><span class="line"><span class="keyword">bool</span> need_valC =</span><br><span class="line">	icode in &#123; IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL, IIADDQ &#125;;</span><br><span class="line"></span><br><span class="line">################ Decode Stage    ###################################</span><br><span class="line"></span><br><span class="line">## What <span class="keyword">register</span> should be used as the A source?</span><br><span class="line">word srcA = [</span><br><span class="line">	icode in &#123; IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ  &#125; : rA;</span><br><span class="line">	icode in &#123; IPOPQ, IRET &#125; : RRSP;</span><br><span class="line">	<span class="number">1</span> : RNONE; # Don<span class="number">&#x27;</span>t need <span class="keyword">register</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">## What <span class="keyword">register</span> should be used as the B source?</span><br><span class="line">word srcB = [</span><br><span class="line">	icode in &#123; IOPQ, IRMMOVQ, IMRMOVQ, IIADDQ &#125; : rB;</span><br><span class="line">	icode in &#123; IPUSHQ, IPOPQ, ICALL, IRET &#125; : RRSP;</span><br><span class="line">	<span class="number">1</span> : RNONE;  # Don<span class="number">&#x27;</span>t need <span class="keyword">register</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">## What <span class="keyword">register</span> should be used as the E destination?</span><br><span class="line">word dstE = [</span><br><span class="line">	icode in &#123; IRRMOVQ &#125; &amp;&amp; Cnd : rB;</span><br><span class="line">	icode in &#123; IIRMOVQ, IOPQ, IIADDQ&#125; : rB;</span><br><span class="line">	icode in &#123; IPUSHQ, IPOPQ, ICALL, IRET &#125; : RRSP;</span><br><span class="line">	<span class="number">1</span> : RNONE;  # Don<span class="number">&#x27;</span>t write any <span class="keyword">register</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">## What <span class="keyword">register</span> should be used as the M destination?</span><br><span class="line">word dstM = [</span><br><span class="line">	icode in &#123; IMRMOVQ, IPOPQ &#125; : rA;</span><br><span class="line">	<span class="number">1</span> : RNONE;  # Don<span class="number">&#x27;</span>t write any <span class="keyword">register</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">################ Execute Stage   ###################################</span><br><span class="line"></span><br><span class="line">## Select input A to ALU</span><br><span class="line">word aluA = [</span><br><span class="line">	icode in &#123; IRRMOVQ, IOPQ &#125; : valA;</span><br><span class="line">	icode in &#123; IIRMOVQ, IRMMOVQ, IMRMOVQ, IIADDQ &#125; : valC;</span><br><span class="line">	icode in &#123; ICALL, IPUSHQ &#125; : <span class="number">-8</span>;</span><br><span class="line">	icode in &#123; IRET, IPOPQ &#125; : <span class="number">8</span>;</span><br><span class="line">	# Other instructions don<span class="number">&#x27;</span>t need ALU</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">## Select input B to ALU</span><br><span class="line">word aluB = [</span><br><span class="line">	icode in &#123; IRMMOVQ, IMRMOVQ, IOPQ, ICALL, </span><br><span class="line">		      IPUSHQ, IRET, IPOPQ, IIADDQ &#125; : valB;</span><br><span class="line">	icode in &#123; IRRMOVQ, IIRMOVQ &#125; : <span class="number">0</span>;</span><br><span class="line">	# Other instructions don<span class="number">&#x27;</span>t need ALU</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">## Set the ALU function</span><br><span class="line">word alufun = [</span><br><span class="line">	icode == IOPQ : ifun;</span><br><span class="line">	<span class="number">1</span> : ALUADD;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">## Should the condition codes be updated?</span><br><span class="line"><span class="keyword">bool</span> set_cc = icode in &#123; IOPQ, IIADDQ &#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="part-C"><a href="#part-C" class="headerlink" title="part C"></a>part C</h2><p>TODO…</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/csapp/" rel="tag"># csapp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/10/2020/csapp%20attack/" rel="prev" title="csapp attack">
+      <i class="fa fa-chevron-left"></i> csapp attack
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/21/2021/csapp-malloc-lab/" rel="next" title="csapp malloc lab">
+      csapp malloc lab <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#csapp-arch-lab"><span class="nav-number">1.</span> <span class="nav-text">csapp arch lab</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#part-A"><span class="nav-number">1.1.</span> <span class="nav-text">part A</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sum"><span class="nav-number">1.1.1.</span> <span class="nav-text">sum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsum"><span class="nav-number">1.1.2.</span> <span class="nav-text">rsum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copy-block"><span class="nav-number">1.1.3.</span> <span class="nav-text">copy_block</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-B"><span class="nav-number">1.2.</span> <span class="nav-text">part B</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-C"><span class="nav-number">1.3.</span> <span class="nav-text">part C</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DaiDai"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">DaiDai</p>
+  <div class="site-description" itemprop="description">never stop learning</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://m3wsec.github.io/" title="http:&#x2F;&#x2F;m3wsec.github.io" rel="noopener" target="_blank">m3w</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/qq_46091464" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_46091464" rel="noopener" target="_blank">Firebasky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/erR0Ratao" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;erR0Ratao" rel="noopener" target="_blank">atao</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.d1a0.cn/" title="https:&#x2F;&#x2F;www.d1a0.cn&#x2F;" rel="noopener" target="_blank">d1a0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.cnblogs.com/anweilx/" title="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;anweilx&#x2F;" rel="noopener" target="_blank">anweilx</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://me.csdn.net/Kroner" title="https:&#x2F;&#x2F;me.csdn.net&#x2F;Kroner" rel="noopener" target="_blank">No</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.csdn.net/Amherstieae" title="https:&#x2F;&#x2F;blog.csdn.net&#x2F;Amherstieae" rel="noopener" target="_blank">beta</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.y4tacker.top/" title="http:&#x2F;&#x2F;blog.y4tacker.top" rel="noopener" target="_blank">Y4tacker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://yq1ng.github.io/" title="http:&#x2F;&#x2F;yq1ng.github.io" rel="noopener" target="_blank">yq1ng</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://snowywar.top/wordpress" title="http:&#x2F;&#x2F;snowywar.top&#x2F;wordpress" rel="noopener" target="_blank">snowy</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.sy4.top/" title="https:&#x2F;&#x2F;www.sy4.top&#x2F;" rel="noopener" target="_blank">picnic</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://justloseit.top/" title="http:&#x2F;&#x2F;justloseit.top&#x2F;" rel="noopener" target="_blank">Joker</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://s0uthwood.github.io/" title="https:&#x2F;&#x2F;s0uthwood.github.io&#x2F;" rel="noopener" target="_blank">s0uthwood</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kfxp12138.github.io/" title="https:&#x2F;&#x2F;kfxp12138.github.io&#x2F;" rel="noopener" target="_blank">triplewing</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaiDai</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">197k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:59</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
